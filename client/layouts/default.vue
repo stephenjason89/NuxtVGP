@@ -1,12 +1,12 @@
 <template>
     <v-app>
         <v-main>
-            <nuxt />
+            <slot />
         </v-main>
     </v-app>
 </template>
 <script>
 export default {
-    name: 'BlankLayout',
+    name: 'DefaultLayout',
 }
 </script>
