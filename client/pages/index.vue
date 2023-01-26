@@ -66,7 +66,9 @@
                 <tbody>
                     <tr v-for="item in desserts" :key="item.name">
                         <td>{{ item.name }}</td>
-                        <td>{{ item.calories }}</td>
+                        <td>
+                            <v-chip :color="getColor(item.calories)">{{ item.calories }}</v-chip>
+                        </td>
                     </tr>
                 </tbody>
             </v-table>
