@@ -8,7 +8,11 @@ export default defineNuxtConfig({
     build: {
         transpile: ['vuetify'],
     },
+    imports: {
+        dirs: ['client/stores'],
+    },
     modules: [
+        ['@pinia/nuxt', { autoImports: ['defineStore', 'acceptHMRUpdate'] }],
         async (options, nuxt) => {
             await nuxt.hooks.hook('vite:extendConfig', (config: any) => config.plugins.push(vuetify()))
         },
