@@ -9,7 +9,7 @@ export default defineNuxtConfig({
         transpile: ['vuetify'],
     },
     imports: {
-        dirs: ['client/stores'],
+        dirs: ['./stores'],
     },
     modules: [
         ['@pinia/nuxt', { autoImports: ['defineStore', 'acceptHMRUpdate'] }],

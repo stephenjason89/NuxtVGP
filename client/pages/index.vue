@@ -4,6 +4,20 @@
         <h5>Nuxt 3 / Vuetify / Graphql / Pinia</h5>
 
         <h3 class="my-5">
+            Example Pinia
+            <v-chip color="blue">useCounter</v-chip>
+        </h3>
+        <v-card class="mx-auto my-12" max-width="374">
+            <v-card-title class="text-blue">Pinia useCounter()</v-card-title>
+            <v-card-item>
+                <v-card-text>count: {{ store.count }}</v-card-text>
+                <v-card-text>doubleCount: {{ store.doubleCount }}</v-card-text>
+            </v-card-item>
+
+            <v-card-actions><v-btn color="blue" @click="store.increment()">Increment</v-btn></v-card-actions>
+        </v-card>
+
+        <h3 class="my-5">
             Example Vuetify
             <v-chip color="blue">Card</v-chip>
         </h3>
@@ -81,6 +95,7 @@ export default {
     name: 'App',
     data() {
         return {
+            store: useCounter(),
             selection: 0,
             itemsPerPage: 5,
             headers: [
