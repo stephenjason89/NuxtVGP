@@ -2,7 +2,6 @@
     <v-container>
         <h2>Starter Template</h2>
         <h5>Nuxt 3 / Vuetify / Graphql / Pinia</h5>
-
         <h3 class="my-5">
             Example Pinia
             <v-chip color="blue">useCounter</v-chip>
@@ -10,8 +9,14 @@
         <v-card class="mx-auto my-12" max-width="374">
             <v-card-title class="text-blue">Pinia useCounter()</v-card-title>
             <v-card-item>
-                <v-card-text>count: {{ store.count }}</v-card-text>
-                <v-card-text>doubleCount: {{ store.doubleCount }}</v-card-text>
+                <v-card-text>
+                    <v-chip>count:</v-chip>
+                    {{ store.count }}
+                </v-card-text>
+                <v-card-text>
+                    <v-chip>doubleCount:</v-chip>
+                    {{ store.doubleCount }}
+                </v-card-text>
             </v-card-item>
 
             <v-card-actions><v-btn color="blue" @click="store.increment()">Increment</v-btn></v-card-actions>
@@ -68,20 +73,22 @@
         <h3 class="my-5">
             Example Vuetify
             <v-chip color="blue">SimpleTable</v-chip>
+            <v-chip color="orange">Data from spaceX graphql</v-chip>
         </h3>
         <client-only>
+            <p>There are {{ ships?.length || 0 }} ships.</p>
             <v-table>
                 <thead>
                     <tr>
                         <th class="text-left">Name</th>
-                        <th class="text-left">Calories</th>
+                        <th class="text-left">Active</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in desserts" :key="item.name">
-                        <td>{{ item.name }}</td>
+                    <tr v-for="ship in ships" :key="ship.name">
+                        <td>{{ ship.name }}</td>
                         <td>
-                            <v-chip :color="getColor(item.calories)">{{ item.calories }}</v-chip>
+                            <v-chip :color="ship.active ? 'green' : 'red'">{{ ship.active }}</v-chip>
                         </td>
                     </tr>
                 </tbody>
@@ -89,118 +96,19 @@
         </client-only>
     </v-container>
 </template>
-
-<script>
-export default {
-    name: 'App',
-    data() {
-        return {
-            store: useCounter(),
-            selection: 0,
-            itemsPerPage: 5,
-            headers: [
-                {
-                    text: 'Dessert (100g serving)',
-                    align: 'start',
-                    sortable: false,
-                    value: 'name',
-                },
-                { text: 'Calories', value: 'calories' },
-                { text: 'Fat (g)', value: 'fat' },
-                { text: 'Carbs (g)', value: 'carbs' },
-                { text: 'Protein (g)', value: 'protein' },
-                { text: 'Iron (%)', value: 'iron' },
-            ],
-            desserts: [
-                {
-                    name: 'Frozen Yogurt',
-                    calories: 159,
-                    fat: 6.0,
-                    carbs: 24,
-                    protein: 4.0,
-                    iron: 1,
-                },
-                {
-                    name: 'Ice cream sandwich',
-                    calories: 237,
-                    fat: 9.0,
-                    carbs: 37,
-                    protein: 4.3,
-                    iron: 1,
-                },
-                {
-                    name: 'Eclair',
-                    calories: 262,
-                    fat: 16.0,
-                    carbs: 23,
-                    protein: 6.0,
-                    iron: 7,
-                },
-                {
-                    name: 'Cupcake',
-                    calories: 305,
-                    fat: 3.7,
-                    carbs: 67,
-                    protein: 4.3,
-                    iron: 8,
-                },
-                {
-                    name: 'Gingerbread',
-                    calories: 356,
-                    fat: 16.0,
-                    carbs: 49,
-                    protein: 3.9,
-                    iron: 16,
-                },
-                {
-                    name: 'Jelly bean',
-                    calories: 375,
-                    fat: 0.0,
-                    carbs: 94,
-                    protein: 0.0,
-                    iron: 0,
-                },
-                {
-                    name: 'Lollipop',
-                    calories: 392,
-                    fat: 0.2,
-                    carbs: 98,
-                    protein: 0,
-                    iron: 2,
-                },
-                {
-                    name: 'Honeycomb',
-                    calories: 408,
-                    fat: 3.2,
-                    carbs: 87,
-                    protein: 6.5,
-                    iron: 45,
-                },
-                {
-                    name: 'Donut',
-                    calories: 452,
-                    fat: 25.0,
-                    carbs: 51,
-                    protein: 4.9,
-                    iron: 22,
-                },
-                {
-                    name: 'KitKat',
-                    calories: 518,
-                    fat: 26.0,
-                    carbs: 65,
-                    protein: 7,
-                    iron: 6,
-                },
-            ],
+<script lang="ts" setup>
+const store = useCounter()
+const selection = ref(0)
+const query = gql`
+    query getShips {
+        ships {
+            id
+            name
+            active
         }
-    },
-    methods: {
-        getColor(calories) {
-            if (calories > 400) return 'red'
-            else if (calories > 200) return 'orange'
-            else return 'green'
-        },
-    },
-}
+    }
+`
+
+const { result } = useQuery(query)
+const ships = computed(() => result.value?.ships ?? [])
 </script>

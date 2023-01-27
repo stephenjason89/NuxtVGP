@@ -11,7 +11,17 @@ export default defineNuxtConfig({
     imports: {
         dirs: ['./stores'],
     },
+    apollo: {
+        autoImports: true,
+        proxyCookies: true,
+        clients: {
+            default: {
+                httpEndpoint: 'https://spacex-production.up.railway.app/',
+            },
+        },
+    },
     modules: [
+        '@nuxtjs/apollo',
         ['@pinia/nuxt', { autoImports: ['defineStore', 'acceptHMRUpdate'] }],
         async (options, nuxt) => {
             await nuxt.hooks.hook('vite:extendConfig', (config: any) => config.plugins.push(vuetify()))
