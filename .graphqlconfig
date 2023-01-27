@@ -1,0 +1,18 @@
+{
+    "projects": {
+        "spaceX": {
+            "schemaPath": "introspection.graphql",
+            "extensions": {
+                "endpoints": {
+                    "Default GraphQL Endpoint": {
+                        "url": "https://spacex-production.up.railway.app/",
+                        "headers": {
+                            "user-agent": "JS GraphQL"
+                        },
+                        "introspect": true
+                    }
+                }
+            }
+        }
+    }
+}
