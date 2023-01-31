@@ -23,7 +23,6 @@
         }
     },
     "devDependencies": {
-        "@nuxtjs/apollo": "5.0.0-alpha.5",
         "@nuxtjs/eslint-config-typescript": "^12.0.0",
         "cz-conventional-changelog": "^3.3.0",
         "eslint": "^8.32.0",
@@ -43,8 +42,18 @@
         "vite-plugin-vuetify": "^1.0.1"
     },
     "dependencies": {
+        "@apollo/client": "^3.6.9",
         "@pinia/nuxt": "^0.4.6",
+        "@vue/apollo-composable": "^4.0.0-alpha.18",
+        "@vue/apollo-option": "^4.0.0-alpha.18",
+        "@vue/apollo-ssr": "4.0.0-alpha.18",
+        "axios": "^0.27.2",
+        "graphql": "^16.5.0",
+        "graphql-tag": "^2.11.0",
+        "localforage": "^1.10.0",
+        "pusher-js": "5.1.1",
         "sass": "^1.57.1",
+        "vue-apollo": "^3.1.0",
         "vuetify": "^3.1.2"
     }
 }

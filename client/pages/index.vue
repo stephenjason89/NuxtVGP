@@ -75,28 +75,29 @@
             <v-chip color="blue">SimpleTable</v-chip>
             <v-chip color="orange">Data from spaceX graphql</v-chip>
         </h3>
-        <client-only>
-            <p>There are {{ ships?.length || 0 }} ships.</p>
-            <v-table>
-                <thead>
-                    <tr>
-                        <th class="text-left">Name</th>
-                        <th class="text-left">Active</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="ship in ships" :key="ship.name">
-                        <td>{{ ship.name }}</td>
-                        <td>
-                            <v-chip :color="ship.active ? 'green' : 'red'">{{ ship.active }}</v-chip>
-                        </td>
-                    </tr>
-                </tbody>
-            </v-table>
-        </client-only>
+        <p>There are {{ ships?.length || 0 }} ships.</p>
+        <v-table>
+            <thead>
+                <tr>
+                    <th class="text-left">Name</th>
+                    <th class="text-left">Active</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="ship in ships" :key="ship.name">
+                    <td>{{ ship.name }}</td>
+                    <td>
+                        <v-chip :color="ship.active ? 'green' : 'red'">{{ ship.active }}</v-chip>
+                    </td>
+                </tr>
+            </tbody>
+        </v-table>
     </v-container>
 </template>
 <script lang="ts" setup>
+// eslint-disable-next-line import/no-named-as-default
+import gql from 'graphql-tag'
+import { useQuery } from '@vue/apollo-composable'
 const store = useCounter()
 const selection = ref(0)
 const query = gql`
@@ -109,6 +110,32 @@ const query = gql`
     }
 `
 
-const { result } = useQuery(query)
+const { result, onResult } = useQuery(query)
+onResult((data) => console.log(data))
 const ships = computed(() => result.value?.ships ?? [])
 </script>
+<!--
+<script lang="ts">
+// --options api--
+// eslint-disable-next-line import/no-named-as-default
+import gql from 'graphql-tag'
+export default {
+    data: () => ({
+        ships: [],
+        store: useCounter(),
+        selection: 0,
+    }),
+    apollo: {
+        ships: gql`
+            query getShips {
+                ships {
+                    id
+                    name
+                    active
+                }
+            }
+        `,
+    },
+}
+</script>
+-->
