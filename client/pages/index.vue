@@ -75,25 +75,23 @@
             <v-chip color="blue">SimpleTable</v-chip>
             <v-chip color="orange">Data from spaceX graphql</v-chip>
         </h3>
-        <client-only>
-            <p>There are {{ ships?.length || 0 }} ships.</p>
-            <v-table>
-                <thead>
-                    <tr>
-                        <th class="text-left">Name</th>
-                        <th class="text-left">Active</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="ship in ships" :key="ship.name">
-                        <td>{{ ship.name }}</td>
-                        <td>
-                            <v-chip :color="ship.active ? 'green' : 'red'">{{ ship.active }}</v-chip>
-                        </td>
-                    </tr>
-                </tbody>
-            </v-table>
-        </client-only>
+        <p>There are {{ ships?.length || 0 }} ships.</p>
+        <v-table>
+            <thead>
+                <tr>
+                    <th class="text-left">Name</th>
+                    <th class="text-left">Active</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="ship in ships" :key="ship.name">
+                    <td>{{ ship.name }}</td>
+                    <td>
+                        <v-chip :color="ship.active ? 'green' : 'red'">{{ ship.active }}</v-chip>
+                    </td>
+                </tr>
+            </tbody>
+        </v-table>
     </v-container>
 </template>
 <script lang="ts" setup>
@@ -108,7 +106,12 @@ const query = gql`
         }
     }
 `
-
-const { result } = useQuery(query)
-const ships = computed(() => result.value?.ships ?? [])
+const { data } = useAsyncQuery<{
+    ships: {
+        id: String
+        name: String
+        active: Boolean
+    }
+}>(query)
+const ships = computed(() => data.value?.ships ?? [])
 </script>
