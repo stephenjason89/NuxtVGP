@@ -4,10 +4,10 @@ specifiers:
     '@apollo/client': ^3.6.9
     '@nuxtjs/eslint-config-typescript': ^12.0.0
     '@pinia/nuxt': ^0.4.6
-    '@vue/apollo-composable': ^4.0.0-alpha.18
-    '@vue/apollo-option': ^4.0.0-alpha.18
-    '@vue/apollo-ssr': 4.0.0-alpha.18
+    '@vue/apollo-composable': ^4.0.0-beta.2
+    '@vue/apollo-option': ^4.0.0-beta.2
     axios: ^0.27.2
+    cookie-universal: ^2.2.2
     cz-conventional-changelog: ^3.3.0
     eslint: ^8.32.0
     eslint-config-prettier: ^8.6.0
@@ -17,9 +17,11 @@ specifiers:
     graphql: ^16.5.0
     graphql-tag: ^2.11.0
     husky: ^8.0.3
+    izitoast: ^1.4.0
     lint-staged: ^13.1.0
     localforage: ^1.10.0
     nuxt: ^3.2.0
+    pinia-plugin-persistedstate: ^3.0.2
     postcss-html: ^1.5.0
     prettier: ^2.7.1
     pusher-js: 5.1.1
@@ -37,11 +39,13 @@ dependencies:
     '@pinia/nuxt': 0.4.6
     '@vue/apollo-composable': 4.0.0-beta.2_j3rhk27qsxtoox537gn7bjecv4
     '@vue/apollo-option': 4.0.0-beta.2_@apollo+client@3.7.7
-    '@vue/apollo-ssr': 4.0.0-alpha.18
     axios: 0.27.2
+    cookie-universal: 2.2.2
     graphql: 16.6.0
     graphql-tag: 2.12.6_graphql@16.6.0
+    izitoast: 1.4.0
     localforage: 1.10.0
+    pinia-plugin-persistedstate: 3.0.2
     pusher-js: 5.1.1
     sass: 1.58.1
     vue-apollo: 3.1.0_graphql-tag@2.12.6
@@ -1849,6 +1853,13 @@ packages:
         dev: true
         optional: true
 
+    /@types/cookie/0.3.3:
+        resolution:
+            {
+                integrity: sha512-LKVP3cgXBT9RYj+t+9FDKwS5tdI+rPBXaNSkma7hvqy35lc7mAokC2zsqWJH0LaqIt3B962nuYI77hsJoT1gow==,
+            }
+        dev: false
+
     /@types/estree/1.0.0:
         resolution:
             {
@@ -2194,15 +2205,6 @@ packages:
         dependencies:
             '@apollo/client': 3.7.7_graphql@16.6.0
             throttle-debounce: 3.0.1
-        dev: false
-
-    /@vue/apollo-ssr/4.0.0-alpha.18:
-        resolution:
-            {
-                integrity: sha512-wH7daQsU+qax5TJu5oVFfXRNcw3o8GuNjbkHB073/X2UZGKGn1eTijsDVmXOKJOeiPUXHJtwQmGEFR9c+rpaAQ==,
-            }
-        dependencies:
-            serialize-javascript: 6.0.1
         dev: false
 
     /@vue/babel-helper-vue-transform-on/1.0.2:
@@ -3403,6 +3405,24 @@ packages:
                 integrity: sha512-RyZrFi6PNpBFbIaQjXDlFIhFVqV42QeKSZX1yQIl6ihImq6vcHNGMtqQ/QzY3RMPuYSkvsRwtnt5M9NeYxKt0g==,
             }
         dev: true
+
+    /cookie-universal/2.2.2:
+        resolution:
+            {
+                integrity: sha512-nUXF6HH2YKbn8vGcdSzWJhjRkDHbnbekuVu2nsRu00zYsX7o/H3xGJRlPVoM4wX/8cpJYpyi9nDt+boER0Wjug==,
+            }
+        dependencies:
+            '@types/cookie': 0.3.3
+            cookie: 0.4.2
+        dev: false
+
+    /cookie/0.4.2:
+        resolution:
+            {
+                integrity: sha512-aSWTXFzaKWkvHO1Ny/s+ePFpvKsPnjc551iI41v3ny/ow6tBG5Vd+FuqGNhh1LxOmVzOlGUriIlOaokOvhaStA==,
+            }
+        engines: { node: '>= 0.6' }
+        dev: false
 
     /core-util-is/1.0.3:
         resolution:
@@ -6358,6 +6378,13 @@ packages:
             }
         dev: true
 
+    /izitoast/1.4.0:
+        resolution:
+            {
+                integrity: sha512-Oc1X2wiQtPp39i5VpIjf3GJf5sfCtHKXZ5szx7RareyEeFLUlcEW0FSfBni28+Ul6KNKZRKzhVuWzSP4Xngh0w==,
+            }
+        dev: false
+
     /jiti/1.17.0:
         resolution:
             {
@@ -7934,6 +7961,15 @@ packages:
         engines: { node: '>=0.10.0' }
         dev: true
 
+    /pinia-plugin-persistedstate/3.0.2:
+        resolution:
+            {
+                integrity: sha512-84vPyUhPA/8Pr+1mT1ioNb2d8z4tvdgYRqMQf8xyauOVBKjo0ZcRBwPQBV7ZAJG43Kwar43nXG2jU+ZMvAFFRQ==,
+            }
+        peerDependencies:
+            pinia: ^2.0.0
+        dev: false
+
     /pinia/2.0.30:
         resolution:
             {
@@ -9035,6 +9071,7 @@ packages:
             }
         dependencies:
             randombytes: 2.1.0
+        dev: true
 
     /serve-placeholder/2.0.1:
         resolution:

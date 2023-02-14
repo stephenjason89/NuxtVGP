@@ -8,28 +8,15 @@ class Form {
      * @param {object} data
      */
     constructor(data) {
-        this.originalData = data
         for (const field in data) this[field] = data[field]
-
         this.errors = new Errors(data.errors)
-    }
-
-    /**
-     * Fetch all relevant data for the form.
-     */
-    data() {
-        const data = {}
-        for (const property in this.originalData) data[property] = this[property]
-
-        return data
     }
 
     /**
      * Reset the form fields.
      */
     reset(preventFormReset = false) {
-        if (!preventFormReset) for (const field in this.originalData) this[field] = ''
-
+        if (!preventFormReset) for (const field in this) if (field !== 'errors') this[field] = ''
         this.errors.clear()
     }
 
@@ -40,7 +27,7 @@ class Form {
      * @param preventFormReset
      */
     get(url, preventFormReset = false) {
-        return this.submit('get', url + '?' + this.formEncode(this.data()), preventFormReset)
+        return this.submit('get', url + '?' + this.formEncode(this), preventFormReset)
     }
 
     /**
@@ -89,12 +76,10 @@ class Form {
      */
     submit(requestType, url, preventFormReset = false) {
         return new Promise((resolve, reject) => {
-            axios[requestType](url, this.data())
+            axios[requestType](url, this)
                 .then((response) => {
                     this.onSuccess(response.data, preventFormReset)
-
                     if (response.data.error_message || response.data.error) this.onFail(response.data)
-
                     resolve(response.data)
                 })
                 .catch((error) => {
@@ -109,6 +94,7 @@ class Form {
      * Handle a successful form submission.
      *
      * @param {object} data
+     * @param preventFormReset
      */
 
     onSuccess(data, preventFormReset = false) {

@@ -1,12 +1,4 @@
 // import * as pluralize from 'pluralize'
-import localforage from 'localforage'
-
-export function getSubdomain(url) {
-    return (url?.match(/localhost/g)?.length && url?.match(/\./g)?.length === 1) ||
-        url?.match(/\./g)?.length === 2
-        ? url.split('.')[0]
-        : ''
-}
 
 export function toHMS(refDate, dateTime) {
     const ms = new Date(dateTime) - refDate
@@ -82,6 +74,7 @@ export function canUseWebP() {
 
 export async function rememberTour(name, userId, data = {}, key = 'tours', isRemember = true) {
     try {
+        const localforage = await import('localforage')
         const tourData = (await localforage.getItem(key)) ?? {}
 
         return localforage.setItem(key, {
@@ -95,6 +88,7 @@ export async function rememberTour(name, userId, data = {}, key = 'tours', isRem
 
 export async function isRememberTour(name, userId, key = 'tours') {
     try {
+        const localforage = await import('localforage')
         return (await localforage.getItem(key))?.[name]?.[userId].isRemember ?? false
     } catch {
         return new Promise((resolve) => resolve(false))

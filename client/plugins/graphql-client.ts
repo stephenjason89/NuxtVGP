@@ -1,5 +1,5 @@
-// import { BatchHttpLink } from '@apollo/client/link/batch-http'
-import { InMemoryCache, ApolloClient, ApolloLink, HttpLink } from '@apollo/client/core'
+import { BatchHttpLink } from '@apollo/client/link/batch-http'
+import { InMemoryCache, ApolloClient, ApolloLink } from '@apollo/client/core'
 // import { CachePersistor, LocalForageWrapper } from 'apollo3-cache-persist'
 // import localforage from 'localforage'
 import { createApolloProvider } from '@vue/apollo-option'
@@ -7,12 +7,10 @@ import { DefaultApolloClient, provideApolloClient } from '@vue/apollo-composable
 import Pusher from 'pusher-js'
 import { onError } from '@apollo/client/link/error'
 import { defineNuxtPlugin, useRequestEvent, useRuntimeConfig } from '#app'
-import { getSubdomain } from '~/assets/js/utils'
 import PusherLink from '~/plugins/graphql/pusher'
-// import { useAuth } from '~/store/auth'
 
 export default defineNuxtPlugin((nuxtApp) => {
-    const auth = {}
+    const auth = useAuth()
     const runtimeConfig = useRuntimeConfig()
     const event = useRequestEvent()
     const cache = new InMemoryCache()
@@ -30,30 +28,18 @@ export default defineNuxtPlugin((nuxtApp) => {
     //     }
     // }
 
-    // const authFetch = async (uri, options) => {
-    //     const initialRequest = await fetch(uri, options)
-    //     let expiredToken = false
-    //
-    //     for (const query of await initialRequest.clone().json())
-    //         if (query?.errors?.[0]?.message === 'Unauthenticated.') {
-    //             expiredToken = true
-    //             break
-    //         }
-    //
-    //     if (expiredToken && auth.isRefreshTokenExpired) {
-    //         console.error('expired token:', expiredToken, auth.isRefreshTokenExpired)
-    //         auth.logout(true)
-    //         return { text: () => Promise.resolve('{"data":{}}') }
-    //     } else if (expiredToken && process.client) {
-    //         await auth.refresh()
-    //         options.headers.Authorization = auth.token
-    //         return fetch(uri, options)
-    //     } else {
-    //         return initialRequest
-    //     }
-    // }
+    const authFetch = async (uri: string, options: any) => {
+        if (auth.userId) {
+            if (auth.isTokenExpired() && auth.isRefreshTokenExpired()) {
+                auth.logout(true)
+                return { text: () => Promise.resolve('{data:{}}') }
+            } else if (auth.isTokenExpired()) await auth.refresh()
+            options.headers.authorization = auth.token
+        }
+        return fetch(uri, options)
+    }
 
-    const host = process.server ? event?.req?.headers?.host : location?.hostname
+    const host = event?.node?.req?.headers?.host ?? location.hostname
     const subdomain = getSubdomain(host)
 
     const link = ApolloLink.from([
@@ -69,13 +55,16 @@ export default defineNuxtPlugin((nuxtApp) => {
         ...(process.client
             ? [
                   new PusherLink({
-                      pusher: new Pusher(runtimeConfig.public.pusherKey, {
+                      pusher: new Pusher(runtimeConfig.pusherKey, {
                           auth: {
+                              params: {},
                               headers: { 'X-Tenant': subdomain },
                           },
+                          cluster: runtimeConfig.public.pusherCluster,
                           wsHost: runtimeConfig.public.wsHostname,
-                          wsPort: runtimeConfig.public.wsPort,
-                          wssPort: runtimeConfig.public.wsPort,
+                          wsPort: +runtimeConfig.public.wsPort,
+                          wssPort: +runtimeConfig.public.wsPort,
+                          forceTLS: false,
                           disableStats: true,
                           authEndpoint: `${runtimeConfig.public.graphqlEndpoint}/graphql/subscriptions/auth`,
                           enabledTransports: ['ws', 'wss'],
@@ -83,10 +72,11 @@ export default defineNuxtPlugin((nuxtApp) => {
                   }),
               ]
             : []),
-        new HttpLink({
+        new BatchHttpLink({
             uri: `${runtimeConfig.public.graphqlEndpoint}/graphql`,
             headers: { 'X-Tenant': subdomain, Authorization: auth.token },
-            fetch,
+            fetch: authFetch as WindowOrWorkerGlobalScope['fetch'],
+            batchDebounce: true,
         }),
     ])
 
@@ -97,9 +87,8 @@ export default defineNuxtPlugin((nuxtApp) => {
         ...(process.server ? { ssrMode: true } : { ssrForceFetchDelay: 100 }),
     })
 
-    nuxtApp.hook('app:rendered', () => (nuxtApp.payload.data.apollo = cache.extract()))
-    if (process.client && window.__NUXT__.data.apollo) cache.restore(window.__NUXT__.data.apollo)
-
+    nuxtApp.hook('app:rendered', () => (nuxtApp.payload.data.apollo = cache.extract() as any))
+    if (process.client && window?.__NUXT__?.data.apollo) cache.restore(window?.__NUXT__.data.apollo)
     const apolloProvider = createApolloProvider({ defaultClient: apolloClient })
 
     provideApolloClient(apolloClient)

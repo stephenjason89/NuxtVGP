@@ -30,8 +30,9 @@ export default defineNuxtConfig({
     runtimeConfig: {
         public: {
             nuxtURL: process.env.NUXT_URL,
-            graphqlEndpoint: process.env.GRAPHQL_URL,
+            graphqlEndpoint: process.env.LARAVEL_URL,
             pusherKey: process.env.PUSHER_APP_KEY,
+            pusherCluster: process.env.PUSHER_APP_CLUSTER,
             wsHostname: process.env.WS_HOSTNAME,
             wsPort: process.env.WS_PORT,
         },
