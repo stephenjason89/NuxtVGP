@@ -97,7 +97,6 @@
 <script lang="ts" setup>
 // eslint-disable-next-line import/no-named-as-default
 import gql from 'graphql-tag'
-import { useQuery } from '@vue/apollo-composable'
 const store = useCounter()
 const selection = ref(0)
 const query = gql`
@@ -110,8 +109,7 @@ const query = gql`
     }
 `
 
-const { result, onResult } = useQuery(query)
-onResult((data) => console.log(data))
+const { result } = useQuery(query)
 const ships = computed(() => result.value?.ships ?? [])
 </script>
 <!--
