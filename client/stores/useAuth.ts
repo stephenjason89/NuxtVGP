@@ -23,7 +23,6 @@ export const useAuth = defineStore('auth', {
         async login(data: any) {
             const form = data instanceof Form ? data : new Form(data)
             const { token_type, access_token, refresh_token, expires_in, user, error, message } =
-                // @ts-ignore
                 await form.post(useRuntimeConfig().public.graphqlEndpoint + '/api/get-token', true)
             if (!error) {
                 const tokenExpiration = new Date().getTime() + expires_in * 1000
@@ -37,14 +36,12 @@ export const useAuth = defineStore('auth', {
                     refreshTokenExpiration,
                     isRefreshing: false,
                 })
-                // @ts-ignore
                 if (useNuxtApp().$router.currentRoute.name === 'login')
                     useNuxtApp().$router.push('/dashboard')
             } else {
                 console.error('Login error:', error, message)
                 this.logout()
             }
-            console.log(form)
             return form
         },
         /* eslint-enable */

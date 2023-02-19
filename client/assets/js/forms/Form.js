@@ -1,6 +1,4 @@
-import axios from 'axios'
 import Errors from './Errors'
-
 class Form {
     /**
      * Create a new Form instance.
@@ -27,7 +25,7 @@ class Form {
      * @param preventFormReset
      */
     get(url, preventFormReset = false) {
-        return this.submit('get', url + '?' + this.formEncode(this), preventFormReset)
+        return this.submit('GET', url + '?' + this.formEncode(this), preventFormReset)
     }
 
     /**
@@ -37,7 +35,7 @@ class Form {
      * @param preventFormReset
      */
     post(url, preventFormReset = false) {
-        return this.submit('post', url, preventFormReset)
+        return this.submit('POST', url, preventFormReset)
     }
 
     /**
@@ -46,7 +44,7 @@ class Form {
      * @param {string} url
      */
     put(url) {
-        return this.submit('put', url)
+        return this.submit('PUT', url)
     }
 
     /**
@@ -55,7 +53,7 @@ class Form {
      * @param {string} url
      */
     patch(url) {
-        return this.submit('patch', url)
+        return this.submit('PATCH', url)
     }
 
     /**
@@ -64,7 +62,7 @@ class Form {
      * @param {string} url
      */
     delete(url) {
-        return this.submit('delete', url)
+        return this.submit('DELETE', url)
     }
 
     /**
@@ -76,16 +74,15 @@ class Form {
      */
     submit(requestType, url, preventFormReset = false) {
         return new Promise((resolve, reject) => {
-            axios[requestType](url, this)
+            $fetch(url, { method: requestType, params: this })
                 .then((response) => {
-                    this.onSuccess(response.data, preventFormReset)
-                    if (response.data.error_message || response.data.error) this.onFail(response.data)
-                    resolve(response.data)
+                    this.onSuccess(response, preventFormReset)
+                    if (response.error_message || response.error) this.onFail(response)
+                    resolve(response)
                 })
                 .catch((error) => {
-                    this.onFail(error.response.data)
-
-                    reject(error.response.data)
+                    this.onFail(error.response)
+                    reject(error.response)
                 })
         })
     }
