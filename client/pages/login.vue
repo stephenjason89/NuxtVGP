@@ -25,7 +25,7 @@
             >
                 Sign In
             </v-btn>
-            <p class="text-center text-red-600">{{ user.errors.message }}</p>
+            <p class="text-center text-red">{{ user?.errors?.message }}</p>
         </div>
     </div>
 </template>
@@ -39,10 +39,6 @@ export default defineComponent({
         user: {
             username: 'admin@email.com',
             password: 'password',
-            errors: {
-                error: '',
-                message: '',
-            },
         },
         isSocialLogin: false,
         error: '',

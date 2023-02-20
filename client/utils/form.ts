@@ -1,12 +1,12 @@
-import Errors from './Errors'
 class Form {
+    [x: string]: any
     /**
      * Create a new Form instance.
      *
      * @param {object} data
      */
-    constructor(data) {
-        for (const field in data) this[field] = data[field]
+    constructor(data: { [x: string]: any; errors: any }) {
+        Object.assign(this, data)
         this.errors = new Errors(data.errors)
     }
 
@@ -14,6 +14,7 @@ class Form {
      * Reset the form fields.
      */
     reset(preventFormReset = false) {
+        // @ts-ignore
         if (!preventFormReset) for (const field in this) if (field !== 'errors') this[field] = ''
         this.errors.clear()
     }
@@ -24,7 +25,7 @@ class Form {
      * @param {string} url
      * @param preventFormReset
      */
-    get(url, preventFormReset = false) {
+    get(url: string, preventFormReset = false): any {
         return this.submit('GET', url + '?' + this.formEncode(this), preventFormReset)
     }
 
@@ -34,7 +35,7 @@ class Form {
      * @param {string} url
      * @param preventFormReset
      */
-    post(url, preventFormReset = false) {
+    post(url: string, preventFormReset = false): any {
         return this.submit('POST', url, preventFormReset)
     }
 
@@ -43,7 +44,7 @@ class Form {
      * .
      * @param {string} url
      */
-    put(url) {
+    put(url: string): any {
         return this.submit('PUT', url)
     }
 
@@ -52,7 +53,7 @@ class Form {
      * .
      * @param {string} url
      */
-    patch(url) {
+    patch(url: string): any {
         return this.submit('PATCH', url)
     }
 
@@ -61,7 +62,7 @@ class Form {
      * .
      * @param {string} url
      */
-    delete(url) {
+    delete(url: string): any {
         return this.submit('DELETE', url)
     }
 
@@ -72,45 +73,58 @@ class Form {
      * @param {string} url
      * @param preventFormReset
      */
-    submit(requestType, url, preventFormReset = false) {
+    submit(requestType: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE', url: string, preventFormReset = false) {
         return new Promise((resolve, reject) => {
             $fetch(url, { method: requestType, params: this })
-                .then((response) => {
-                    this.onSuccess(response, preventFormReset)
-                    if (response.error_message || response.error) this.onFail(response)
+                .then((response: any) => {
+                    this.reset(preventFormReset)
+                    if (response.error_message || response.error) this.errors.record(response)
                     resolve(response)
                 })
                 .catch((error) => {
-                    this.onFail(error.response)
+                    this.errors.record(error.response)
                     reject(error.response)
                 })
         })
     }
 
-    /**
-     * Handle a successful form submission.
-     *
-     * @param {object} data
-     * @param preventFormReset
-     */
-
-    onSuccess(data, preventFormReset = false) {
-        this.reset(preventFormReset)
-    }
-
-    /**
-     * Handle a failed form submission.
-     *
-     * @param {object} errors
-     */
-    onFail(errors) {
-        this.errors.record(errors)
-    }
-
-    formEncode(obj) {
+    formEncode(obj: this) {
         const str = []
         for (const p in obj) str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]))
         return str.join('&')
+    }
+}
+
+class Errors {
+    [x: string]: any
+    constructor(data: { [x: string]: any }) {
+        for (const field in data) this[field] = ''
+    }
+
+    /**
+     * Record the new errors.
+     *
+     * @param {object} errors
+     */
+    record(errors: object) {
+        Object.assign(this, errors)
+    }
+
+    /**
+     * Clear one or all error fields.
+     *
+     * @param {string|null} field
+     */
+    clear(field = null) {
+        for (const key in this) {
+            // @ts-ignore
+            if (!field) this[key] = ''
+            else if (field === key) {
+                // @ts-ignore
+                this[key] = ''
+                break
+            }
+        }
     }
 }
 

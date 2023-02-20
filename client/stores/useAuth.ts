@@ -1,5 +1,3 @@
-import Form from '~/assets/js/forms/Form.js'
-
 export const useAuth = defineStore('auth', {
     state: () => ({
         userId: '',
@@ -21,9 +19,9 @@ export const useAuth = defineStore('auth', {
         },
         /* eslint-disable */
         async login(data: any) {
-            const form = data instanceof Form ? data : new Form(data)
+            const f = data instanceof form ? data : new form(data)
             const { token_type, access_token, refresh_token, expires_in, user, error, message } =
-                await form.post(useRuntimeConfig().public.graphqlEndpoint + '/api/get-token', true)
+                await f.post(useRuntimeConfig().public.graphqlEndpoint + '/api/get-token', true)
             if (!error) {
                 const tokenExpiration = new Date().getTime() + expires_in * 1000
                 const refreshTokenExpiration = new Date().getTime() + 60 * 60 * 24 * 30 * 1000
@@ -42,13 +40,12 @@ export const useAuth = defineStore('auth', {
                 console.error('Login error:', error, message)
                 this.logout()
             }
-            return form
+            return f
         },
         /* eslint-enable */
         logout(expired = false) {
             this.$reset()
             this.user.$reset()
-            // @ts-ignore
             if (useNuxtApp().$router.currentRoute.name !== 'login') useNuxtApp().$router.push('/login')
             if (expired)
                 useToast().error({
