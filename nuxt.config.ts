@@ -4,9 +4,18 @@ import vuetify from 'vite-plugin-vuetify'
 export default defineNuxtConfig({
     buildDir: '_nuxt',
     srcDir: 'client/',
-    css: ['vuetify/lib/styles/main.sass'],
+    css: ['vuetify/lib/styles/main.sass', '~/assets/css/main.css'],
     build: {
         transpile: ['vuetify', '@apollo/client/core', '@vue/apollo-composable', 'vue-apollo/ssr'],
+    },
+    typescript: {
+        strict: true,
+        tsConfig: {
+            compilerOptions: {
+                lib: ['ESNext', 'DOM'],
+                types: ['@types/lodash'],
+            },
+        },
     },
     imports: {
         dirs: ['./stores'],

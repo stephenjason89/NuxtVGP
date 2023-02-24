@@ -1,0 +1,54 @@
+h1 {
+    font-size: 6rem !important;
+}
+
+h2 {
+    font-size: 3.75rem !important;
+}
+
+h3 {
+    font-size: 3rem !important;
+}
+
+h4 {
+    font-size: 2.125rem !important;
+}
+
+h5 {
+    font-size: 1.5rem !important;
+}
+
+h6 {
+    font-size: 1.25rem !important;
+}
+
+.txt-body-1 {
+    font-size: 1rem !important;
+}
+
+.txt-body-2 {
+    font-size: 0.875rem !important;
+}
+
+.txt-subtitle-1 {
+    font-size: 1rem !important;
+}
+
+.txt-subtitle-2 {
+    font-size: 0.875rem !important;
+}
+
+.txt-button {
+    font-size: 0.875rem !important;
+}
+
+.txt-caption {
+    font-size: 0.75rem !important;
+}
+
+.txt-overline {
+    font-size: 0.75rem !important;
+    line-height: 2rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1667em !important;
+}

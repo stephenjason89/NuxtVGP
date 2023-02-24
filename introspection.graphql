@@ -6,1005 +6,5111 @@ schema {
     subscription: Subscription
 }
 
-directive @contact(
-    "Other relevant notes can be included here; supports markdown links"
+union Addressable = Branch | User
+
+union Categoryable = AccountTitle | Characteristic | Product | User
+
+union Characteristicable = Product | User
+
+union Characteristicables = Product | User
+
+union Contactable = Branch | Courier | User
+
+union Depositable = PaymentDetail
+
+union Loggable =
+    AccountTitle
+    | Address
+    | Branch
+    | Category
+    | Characteristic
+    | Company
+    | ContactDetail
+    | Courier
+    | Deposit
+    | Destination
+    | Inventory
+    | InventoryAdjustment
+    | InventoryAdjustmentDetail
+    | InventoryAudit
+    | InventoryAuditDetail
+    | InventoryAuditIssue
+    | InventoryOrderPoint
+    | InventoryOrderPointDetail
+    | Location
+    | Navigation
+    | Order
+    | OrderDetail
+    | Payment
+    | PaymentDetail
+    | PaymentType
+    | Permission
+    | Price
+    | PriceGroup
+    | Product
+    | ProductPackage
+    | Promotion
+    | Purchase
+    | PurchaseDetail
+    | Quota
+    | Rack
+    | Receipt
+    | ReceiptBook
+    | Receive
+    | ReceiveDetail
+    | Return
+    | Review
+    | Role
+    | Sale
+    | Tag
+    | Terminal
+    | Themes
+    | Unit
+    | Upload
+    | User
+    | Wallet
+
+union Noteable = Order | Schedule
+
+union Paymentable = Sale
+
+union Quotaable = Branch | User
+
+union ReceiptBookable = Sale | Terminal
+
+union Receiptable = Sale
+
+union Receivable = Purchase
+
+union Scheduleable = Order | TransferInventory | User
+
+union Taggable = Branch | Product
+
+union Unitables = Product
+
+union Uploadable = Branch | Product | User
+
+union Userable = Branch | Company
+
+union Walletable = Company | User
+
+type AccountTitle {
+    categories: Category
+    children: [AccountTitle]!
+    code: String
+    company: Company
+    created_at: DateTime
+    deleted_at: DateTime
     description: String
-    "Contact title of the subgraph owner"
-    name: String!
-    "URL where the subgraph's owner can be reached"
-    url: String
-) on SCHEMA
+    id: ID!
+    logs: [Log!]!
+    name: String
+    parent: AccountTitle
+    status: Int
+    updated_at: DateTime
+}
+
+"A paginated list of AccountTitle items."
+type AccountTitlePaginator {
+    "A list of AccountTitle items."
+    data: [AccountTitle!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
 
 type Address {
-    address: String
+    addressable: Addressable!
+    barangay: String
+    building: String
     city: String
-    state: String
-}
-
-type Capsule {
-    dragon: Dragon
-        @deprecated(reason: "This is not available in the REST API after MongoDB has been deprecated")
-    id: ID
-    landings: Int
-    missions: [CapsuleMission]
-    original_launch: Date
-    reuse_count: Int
-    status: String
-    type: String
-}
-
-type CapsuleMission {
-    flight: Int
+    complete_address: String
+    country: String
+    created_at: DateTime
+    deleted_at: DateTime
+    floor: String
+    id: ID!
+    landmark: String
+    latitude: Float
+    logs: [Log!]!
+    longitude: Float
     name: String
+    region: String
+    street: String
+    subdivision: String
+    unit: String
+    updated_at: DateTime
+    zip: String
 }
 
-type Core {
-    asds_attempts: Int
-    asds_landings: Int
-    block: Int
-    id: ID
-    missions: [CapsuleMission]
-    original_launch: Date
-    reuse_count: Int
-    rtls_attempts: Int
-    rtls_landings: Int
-    status: String
-    water_landing: Boolean
+"A paginated list of Address items."
+type AddressPaginator {
+    "A list of Address items."
+    data: [Address!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
 }
 
-type CoreMission {
-    flight: Int
-    name: String
-}
-
-type Distance {
-    feet: Float
-    meters: Float
-}
-
-type Dragon {
-    active: Boolean
-    crew_capacity: Int
+type Branch {
+    addresses: [Address]!
+    categories: [Category]
+    code: String
+    company: Company!
+    company_id: ID
+    contact_details: [ContactDetail]!
+    created_at: DateTime
+    deleted_at: DateTime
     description: String
-    diameter: Distance
-    dry_mass_kg: Int
-    dry_mass_lb: Int
-    first_flight: String
-    heat_shield: DragonHeatShield
-    height_w_trunk: Distance
-    id: ID
-    launch_payload_mass: Mass
-    launch_payload_vol: Volume
+    followers_count: Int
+    id: ID!
+    inventories(criticalLevel: Boolean, where: BranchInventoriesWhereWhereConditions): [Inventory]!
+    logs: [Log!]!
     name: String
-    orbit_duration_yr: Int
-    pressurized_capsule: DragonPressurizedCapsule
-    return_payload_mass: Mass
-    return_payload_vol: Volume
-    sidewall_angle_deg: Float
-    thrusters: [DragonThrust]
-    trunk: DragonTrunk
+    preparation_time: String
+    price_group: PriceGroup
+    quotas: [Quota]
+    racks: [Rack]!
+    radius: Int
+    rating: Float
+    tags: [Tag]!
+    terminals: [Terminal]!
+    updated_at: DateTime
+    uploads: [Upload!]!
+    url: String
+    users: [User]!
+    work_hours: JsonObj
+}
+
+"A paginated list of Branch items."
+type BranchPaginator {
+    "A list of Branch items."
+    data: [Branch!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type Category {
+    account_titles: [AccountTitle]!
+    categoryable: Categoryable
+    characteristics: [Characteristic]!
+    children: [Category]!
+    company: Company
+    created_at: DateTime
+    deleted_at: DateTime
+    description: String
+    id: ID!
+    logs: [Log!]!
+    name: String
+    parent: Category
+    parent_id: ID
+    permissions: [Permission]
+    products: [Product]!
+    scope: String
+    updated_at: DateTime
+    users: [User]!
+}
+
+"A paginated list of Category items."
+type CategoryPaginator {
+    "A list of Category items."
+    data: [Category!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type Characteristic {
+    categories: [Category]!
+    category: Category
+    characteristicable: Characteristicable
+    created_at: DateTime
+    deleted_at: DateTime
+    id: ID!
+    logs: [Log!]!
+    name: String!
+    products: [Product]!
+    updated_at: DateTime
+}
+
+"A paginated list of Characteristic items."
+type CharacteristicPaginator {
+    "A list of Characteristic items."
+    data: [Characteristic!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type Company {
+    addresses: [Address]!
+    branches: [Branch]!
+    contact_details: [ContactDetail]!
+    created_at: DateTime
+    deleted_at: DateTime
+    description: String
+    id: ID!
+    inventories: [Inventory]!
+    logs: [Log!]!
+    name: String!
+    print_layouts: [PrintLayout]!
+    products: [Product]!
+    reviews: [Review]!
+    suppliers: [Company!]!
+    theme: Themes
+    updated_at: DateTime
+    uploads: [Upload]!
+    url: String
+    users: [User]!
+    wallets: [Wallet]!
+    work_hours: JsonObj
+}
+
+"A paginated list of Company items."
+type CompanyPaginator {
+    "A list of Company items."
+    data: [Company!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type ContactDetail {
+    contactable: Contactable!
+    created_at: DateTime
+    deleted_at: DateTime
+    email: String
+    emergency_contact: String
+    emergency_name: String
+    id: ID!
+    logs: [Log!]!
+    number: String
     type: String
-    wikipedia: String
+    updated_at: DateTime
 }
 
-type DragonHeatShield {
-    dev_partner: String
-    material: String
-    size_meters: Float
-    temp_degrees: Int
+type Courier {
+    contact_details: [ContactDetail]!
+    created_at: DateTime!
+    deleted_at: DateTime
+    description: String
+    id: ID!
+    is_company_owned: Boolean!
+    logs: [Log!]!
+    name: String!
+    orders: [Order]!
+    updated_at: DateTime!
 }
 
-type DragonPressurizedCapsule {
-    payload_volume: Volume
+type Deposit {
+    amount: Float!
+    created_at: DateTime!
+    deleted_at: DateTime
+    depositable: [Depositable]!
+    id: ID!
+    logs: [Log!]!
+    updated_at: DateTime!
+    wallet: Wallet!
 }
 
-type DragonThrust {
-    amount: Int
-    fuel_1: String
-    fuel_2: String
-    pods: Int
-    thrust: Force
-    type: String
+type Destination {
+    address: Address
+    arrived_at: DateTime
+    created_at: DateTime!
+    deleted_at: DateTime
+    id: ID!
+    logs: [Log!]!
+    navigation: Navigation
+    updated_at: DateTime!
 }
 
-type DragonTrunk {
-    cargo: DragonTrunkCargo
-    trunk_volume: Volume
-}
-
-type DragonTrunkCargo {
-    solar_array: Int
-    unpressurized_cargo: Boolean
-}
-
-type Force {
-    kN: Float
-    lbf: Float
-}
-
-type HistoriesResult {
-    data: [History]
-    result: Result
-}
-
-type History {
-    details: String
-    event_date_unix: Date
-    event_date_utc: Date
-    flight: Launch
+type Domain {
+    created_at: String
+    domain: String
     id: ID
-    links: Link
-    title: String
+    logs: [Log!]!
+    tenant: Tenant
+    tenant_id: String
+    updated_at: String
 }
 
-type Info {
-    ceo: String
-    coo: String
-    cto: String
-    cto_propulsion: String
-    employees: Int
-    founded: Int
-    founder: String
-    headquarters: Address
-    launch_sites: Int
-    links: InfoLinks
+"A paginated list of Domain items."
+type DomainPaginator {
+    "A list of Domain items."
+    data: [Domain!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type HasUser {
+    status: String!
+}
+
+type Inventory {
+    branch(trashed: Trashed): Branch
+    branch_id: ID
+    branch_qty: Int
+    created_at: DateTime!
+    deleted_at: DateTime
+    id: ID
+    issue_type: Int
+    logs: [Log!]!
+    month: Int
+    orderPoint: [InventoryOrderPoint!]!
+    order_qty: Int
+    order_to_branch: String
+    product(where: InventoryProductWhereWhereConditions): Product
+    product_id: ID
+    qty: Float
+    rack(trashed: Trashed): Rack
+    rack_id: ID
+    reorder_point: Int
+    updated_at: DateTime!
+}
+
+type InventoryAdjustment {
+    created_at: DateTime!
+    deleted_at: DateTime
+    details(where: InventoryAdjustmentDetailsWhereWhereConditions): [InventoryAdjustmentDetail]
+    id: ID
+    inventory_audit: [InventoryAudit]
+    logs: [Log!]!
     name: String
-    summary: String
-    test_sites: Int
-    valuation: Float
-    vehicles: Int
+    product: Product
+    product_id: ID
+    status: Int
+    updated_at: DateTime!
 }
 
-type InfoLinks {
-    elon_twitter: String
-    flickr: String
-    twitter: String
-    website: String
-}
-
-type Landpad {
-    attempted_landings: String
-    details: String
-    full_name: String
+type InventoryAdjustmentDetail {
+    created_at: DateTime!
+    deleted_at: DateTime
     id: ID
-    landing_type: String
-    location: Location
-    status: String
-    successful_landings: String
-    wikipedia: String
+    inventory_adjustment: InventoryAdjustment
+    inventory_audit_issue: InventoryAuditIssue
+    issue_type: Int
+    logs: [Log!]!
+    qty: Float
+    rack: Rack
+    rack_id: Int
+    updated_at: DateTime!
 }
 
-type Launch {
-    details: String
+type InventoryAudit {
+    branch: Branch
+    created_at: DateTime!
+    deleted_at: DateTime
+    details(where: InventoryAuditDetailsWhereWhereConditions): [InventoryAuditDetail]
     id: ID
-    is_tentative: Boolean
-    launch_date_local: Date
-    launch_date_unix: Date
-    launch_date_utc: Date
-    launch_site: LaunchSite
-    launch_success: Boolean
-    launch_year: String
-    links: LaunchLinks
-    mission_id: [String]
-    mission_name: String
-    rocket: LaunchRocket
-    ships: [Ship]
-    static_fire_date_unix: Date
-    static_fire_date_utc: Date
-    telemetry: LaunchTelemetry
-    tentative_max_precision: String
-    upcoming: Boolean
+    inventory_adjustments(
+        where: InventoryAuditInventoryAdjustmentsWhereWhereConditions
+    ): [InventoryAdjustment]
+    issue_status: Int
+    issues(where: InventoryAuditIssuesWhereWhereConditions): [InventoryAuditIssue]
+    logs: [Log!]!
+    percent: Float
+    rack: Rack
+    status: Int
+    updated_at: DateTime!
+    user: User
 }
 
-type LaunchLinks {
-    article_link: String
-    flickr_images: [String]
-    mission_patch: String
-    mission_patch_small: String
-    presskit: String
-    reddit_campaign: String
-    reddit_launch: String
-    reddit_media: String
-    reddit_recovery: String
-    video_link: String
-    wikipedia: String
-}
-
-type LaunchRocket {
-    fairings: LaunchRocketFairings
-    first_stage: LaunchRocketFirstStage
-    rocket: Rocket
-    rocket_name: String
-    rocket_type: String
-    second_stage: LaunchRocketSecondStage
-}
-
-type LaunchRocketFairings {
-    recovered: Boolean
-    recovery_attempt: Boolean
-    reused: Boolean
-    ship: String
-}
-
-type LaunchRocketFirstStage {
-    cores: [LaunchRocketFirstStageCore]
-}
-
-type LaunchRocketFirstStageCore {
-    block: Int
-    core: Core
-    flight: Int
-    gridfins: Boolean
-    land_success: Boolean
-    landing_intent: Boolean
-    landing_type: String
-    landing_vehicle: String
-    legs: Boolean
-    reused: Boolean
-}
-
-type LaunchRocketSecondStage {
-    block: Int
-    payloads: [Payload]
-}
-
-type LaunchSite {
-    site_id: String
-    site_name: String
-    site_name_long: String
-}
-
-type LaunchTelemetry {
-    flight_club: String
-}
-
-type LaunchesPastResult {
-    data: [Launch]
-    result: Result
-}
-
-type Launchpad {
-    attempted_launches: Int
-    details: String
+type InventoryAuditDetail {
+    action: Int
+    branch: Branch
+    created_at: DateTime!
+    deleted_at: DateTime
+    from_qty: Float
     id: ID
-    location: Location
-    name: String
-    status: String
-    successful_launches: Int
-    vehicles_launched: [Rocket]
-    wikipedia: String
+    inventory_audit: InventoryAudit
+    issues: InventoryAuditIssue
+    logs: [Log!]!
+    product: Product
+    remarks: String
+    to_qty: Float
+    updated_at: DateTime!
+    witness1: User
+    witness2: User
 }
 
-type Link {
-    article: String
-    reddit: String
-    wikipedia: String
+"A paginated list of InventoryAuditDetail items."
+type InventoryAuditDetailPaginator {
+    "A list of InventoryAuditDetail items."
+    data: [InventoryAuditDetail!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type InventoryAuditIssue {
+    adjustment_detail: InventoryAdjustmentDetail
+    created_at: DateTime!
+    deleted_at: DateTime
+    detail: InventoryAuditDetail
+    id: ID
+    inventory_audit: InventoryAudit
+    issue_type: Int
+    logs: [Log!]!
+    product: Product
+    qty: Float
+    updated_at: DateTime!
+}
+
+"A paginated list of InventoryAudit items."
+type InventoryAuditPaginator {
+    "A list of InventoryAudit items."
+    data: [InventoryAudit!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type InventoryOrderPoint {
+    branch: Branch
+    created_at: DateTime
+    deleted_at: DateTime
+    id: ID!
+    inventory_order_point_details: [InventoryOrderPointDetail]
+    logs: [Log!]!
+    order_to: Branch
+    product: Product
+    updated_at: DateTime
+}
+
+type InventoryOrderPointDetail {
+    created_at: DateTime
+    deleted_at: DateTime
+    id: ID
+    logs: [Log!]!
+    month: Int
+    monthLabel: String
+    order_qty: Float
+    reorder_point: Float
+    updated_at: DateTime
+}
+
+"A paginated list of InventoryOrderPoint items."
+type InventoryOrderPointPaginator {
+    "A list of InventoryOrderPoint items."
+    data: [InventoryOrderPoint!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+"A paginated list of Inventory items."
+type InventoryPaginator {
+    "A list of Inventory items."
+    data: [Inventory!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type InventoryStockValue {
+    branch: String
+    branch_id: Int
+    item: String
+    item_id: Int
+    total: Float
+}
+
+type Label {
+    alias: String!
+    created_at: String!
+    id: ID!
+    logs: [Log!]!
+    name: String!
+}
+
+"A paginated list of Label items."
+type LabelPaginator {
+    "A list of Label items."
+    data: [Label!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
 }
 
 type Location {
+    created_at: DateTime!
+    deleted_at: DateTime
+    id: ID!
+    latitude: Float
+    logs: [Log!]!
+    longitude: Float
+    navigation: Navigation
+    updated_at: DateTime!
+}
+
+type Log {
+    auditable: Loggable
+    auditable_id: Int!
+    auditable_type: String!
+    created_at: DateTime
+    event: String!
+    id: ID!
+    ip_address: String
+    new_values: JsonObj
+    old_values: JsonObj
+    tags: String
+    updated_at: DateTime
+    url: String
+    user: User
+    user_agent: String
+    user_id: Int
+    user_type: String
+}
+
+"A paginated list of Log items."
+type LogPaginator {
+    "A list of Log items."
+    data: [Log!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type Message {
+    content: String
+    created_at: DateTime
+    id: ID
+    message_room: MessageRoom
+    room(userId: ID): MessageRoom
+    subscriber(id: ID): User
+    updated_at: DateTime
+    user: User
+}
+
+"A paginated list of Message edges."
+type MessageConnection {
+    "A list of Message edges."
+    edges: [MessageEdge!]!
+    "Pagination information about the list of edges."
+    pageInfo: PageInfo!
+}
+
+"An edge that contains a node of type Message and a cursor."
+type MessageEdge {
+    "A unique cursor that can be used for pagination."
+    cursor: String!
+    "The Message node."
+    node: Message!
+}
+
+type MessageRoom {
+    created_at: String
+    id: ID
+    messageRoomUserPivot: [User]
+    messages(
+        "A cursor after which elements are returned."
+        after: String
+        "Limits number of fetched items."
+        first: Int!
+    ): MessageConnection
+    name: String
+    on_call: Int
+    peer: String
+    pivot: MessageRoomPivot
+    status: MessageRoomPivot
+    type: String
+    updated_at: String
+    user(id: ID): User
+    users: [User]
+}
+
+"A paginated list of MessageRoom edges."
+type MessageRoomConnection {
+    "A list of MessageRoom edges."
+    edges: [MessageRoomEdge!]!
+    "Pagination information about the list of edges."
+    pageInfo: PageInfo!
+}
+
+"An edge that contains a node of type MessageRoom and a cursor."
+type MessageRoomEdge {
+    "A unique cursor that can be used for pagination."
+    cursor: String!
+    "The MessageRoom node."
+    node: MessageRoom!
+}
+
+type MessageRoomPivot {
+    created_at: String
+    id: ID
+    last_seen_message: Int
+    marked_as_read: Boolean
+    message_room_id: Int
+    message_roomable_id: Int
+    message_roomable_type: String
+    updated_at: String
+}
+
+type Mutation {
+    CreateAccountTitle(input: AccountTitleInput!): AccountTitle
+    CreateContactDetail(input: ContactDetailInput!): ContactDetail
+    CreateCourier(input: CourierInput!): Courier
+    CreateDeposit(input: DepositInput!): Deposit
+    CreateDestination(input: DestinationInput!): Destination
+    CreateInventoryAuditIssue(input: InventoryAuditIssueInput!): InventoryAuditIssue
+    CreateLocation(input: LocationInput!): Location
+    CreateNavigation(input: NavigationInput!): Navigation
+    CreatePayment(input: PaymentInput!): Payment
+    CreatePaymentDetail(input: PaymentDetailInput!): PaymentDetail
+    CreatePrice(input: PriceInput!): Price
+    CreateProductPackage(input: ProductPackageInput!): ProductPackage
+    CreateReceipt(input: ReceiptInput!): Receipt
+    CreateReceiptBook(input: ReceiptBookInput!): ReceiptBook
+    CreateReturn(input: ReturnInput!): Return
+    CreateReview(input: ReviewInput!): Review
+    CreateSale(input: SaleInput!): Sale
+    CreateTag(input: TagInput!): Tag
+    CreateTheme(input: CreateThemeInput!): Themes
+    CreateUpload(input: UploadInput!): Upload
+    DeleteAccountTitle(id: ID!): AccountTitle
+    UpdateAccountTitle(input: AccountTitleInput!): AccountTitle
+    UpdateContactDetail(input: ContactDetailInput!): ContactDetail
+    UpdateCourier(input: CourierInput!): Courier
+    UpdateDeposit(input: DepositInput!): Deposit
+    UpdateDestination(input: DestinationInput!): Destination
+    UpdateInventoryAuditIssue(input: InventoryAuditIssueInput!): InventoryAuditIssue
+    UpdateLocation(input: LocationInput!): Location
+    UpdateNavigation(input: NavigationInput!): Navigation
+    UpdatePayment(input: PaymentInput!): Payment
+    UpdatePaymentDetail(input: PaymentDetailInput!): PaymentDetail
+    UpdatePrice(input: PriceInput!): Price
+    UpdateProductPackage(input: ProductPackageInput!): ProductPackage
+    UpdateReceipt(input: ReceiptInput!): Receipt
+    UpdateReceiptBook(input: ReceiptBookInput!): ReceiptBook
+    UpdateReturn(input: ReturnInput!): Return
+    UpdateReview(input: ReviewInput!): Review
+    UpdateSale(input: SaleInput!): Sale
+    UpdateTag(input: TagInput!): Tag
+    UpdateUpload(input: UploadInput!): Upload
+    UpsertAdjustmentInventory(input: InventoryAdjustmentInput!): InventoryAdjustment
+    UpsertInventory(input: InventoryInput!): [Inventory]
+    UpsertInventoryOrderPoint(input: InventoryOrderPointInput): [InventoryOrderPoint]
+    UpsertOrder(input: OrderInput): Order
+    UpsertTenant(input: TenantInput!): Tenant
+    UpsertUserProject(input: OrderInput): Order
+    create(input: PaymentTypeInput!): PaymentType
+    createBranch(input: BranchInput!): Branch
+    createInventoryAuditDetail(input: InventoryAuditDetailInput!): InventoryAuditDetail
+    createOrderDetails(input: OrderDetailInput!): OrderDetail
+    createRack(input: RackInput!): Rack
+    deleteAddress(id: ID!): Address
+    deleteBranch(id: ID!): Branch
+    deleteCategory(id: ID!): Category
+    deleteCharacteristic(id: ID!): Characteristic
+    deleteCompany(id: ID!): Company
+    deleteDomain(id: ID!): Domain
+    deleteInventoryOrderPoint(id: ID!): InventoryOrderPoint
+    deleteLabel(id: ID!): Label
+    deletePermission(id: ID!): Permission
+    deletePriceGroup(id: ID!): PriceGroup
+    deletePrintLayout(id: ID!): PrintLayout
+    deleteProduct(id: ID!): Product
+    deletePurchase(id: ID!): Purchase
+    deletePurchaseDetail(id: ID!): PurchaseDetail
+    deleteReceive(id: ID!): Receive
+    deleteReceiveDetail(id: ID!): ReceiveDetail
+    deleteRole(id: ID!): Role
+    deleteTenant(id: ID!): Tenant
+    deleteTerminal(id: ID!): Terminal
+    deleteUnit(id: ID!): Unit
+    deleteUser(id: ID!): User
+    dropAccountTitle(id: ID!): AccountTitle
+    dropAddress(id: ID!): Address
+    dropBranch(id: ID!): Branch
+    dropCategory(id: ID!): Category
+    dropCharacteristic(id: ID!): Characteristic
+    dropCompany(id: ID!): Company
+    dropInventoryAudit(id: ID!): InventoryAudit
+    dropInventoryOrderPoint(id: ID!): InventoryOrderPoint
+    dropRack(input: RackInput!): Rack
+    dropReceipt(id: ID!): Receipt
+    dropReceiptBook(id: ID!): ReceiptBook
+    dropRole(id: ID!): Role
+    dropSale(input: SaleInput!): Sale
+    dropTag(id: ID!): Tag
+    dropTerminal(id: ID!): Terminal
+    dropUnit(id: ID!): Unit
+    dropUser(id: ID!): User
+    restoreAccountTitle(id: ID!): AccountTitle
+    restoreAddress(id: ID!): Address
+    restoreBranch(id: ID!): Branch
+    restoreCategory(id: ID!): Category
+    restoreCharacteristic(id: ID!): Characteristic
+    restoreCompany(id: ID!): Company
+    restoreInventoryAudit(id: ID!): InventoryAudit
+    restoreInventoryOrderPoint(id: ID!): InventoryOrderPoint
+    restorePermission(id: ID!): Permission
+    restoreProduct(id: ID!): Product
+    restoreRack(input: RackInput!): Rack
+    restoreReceipt(id: ID!): Receipt
+    restoreReceiptBook(id: ID!): ReceiptBook
+    restoreRole(id: ID!): Role
+    restoreSale(input: SaleInput!): Sale
+    restoreTag(id: ID!): Tag
+    restoreTerminal(id: ID!): Terminal
+    restoreUnit(id: ID!): Unit
+    restoreUser(id: ID!): User
+    transferInventory(input: Mixed): TransferInventory
+    transferInventorySchedule(input: Mixed): TransferInventory
+    update(input: PaymentTypeInput!): PaymentType
+    updateBranch(input: BranchInput!): Branch
+    updateInventoryAuditDetail(input: InventoryAuditDetailInput!): InventoryAuditDetail
+    updateOrderDetails(input: OrderDetailInput!): OrderDetail
+    updateRack(input: RackInput!): Rack
+    upsertAddress(input: AddressInput!): Address
+    upsertAdjustmentDetail(input: InventoryAdjustmentDetailInput): InventoryAdjustmentDetail
+    upsertBranch(input: BranchInput!): Branch
+    upsertCategory(input: CategoryInput!): Category
+    upsertCharacteristic(input: CharacteristicInput!): Characteristic
+    upsertCompany(input: CompanyInput!): Company
+    upsertDomain(input: DomainInput!): Domain
+    upsertInventory(input: InventoryInput!): Inventory
+    upsertInventoryAudit(input: InventoryAuditInput!): InventoryAudit
+    upsertLabel(input: LabelInput!): Label
+    upsertMessage(input: MessageInput): Message
+    upsertMessageRoom(input: MessageRoomInput): MessageRoom
+    upsertOrder(input: OrderInput): Order
+    upsertPermission(input: PermissionInput): Permission
+    upsertPriceGroup(input: PriceGroupInput!): PriceGroup
+    upsertPrintLayouts(input: PrintLayoutInput!): PrintLayout
+    upsertProduct(input: ProductInput): Product
+    upsertPurchase(input: PurchaseInput!): Purchase
+    upsertPurchaseDetail(input: PurchaseDetailInput!): PurchaseDetail
+    upsertReceive(input: ReceiveInput!): Receive
+    upsertReceiveDetail(input: ReceiveDetailInput!): ReceiveDetail
+    upsertRole(input: RoleInput): Role
+    upsertSale(input: SaleInput!): Sale
+    upsertTerminal(input: TerminalInput!): Terminal
+    upsertTransferInventory(input: TransferInventoryInput): TransferInventory
+    upsertUnit(input: UnitInput!): Unit
+    upsertUser(input: UserInput): User
+}
+
+type Navigation {
+    completed_at: DateTime
+    created_at: DateTime!
+    deleted_at: DateTime
+    description: String
+    destinations: [Destination]!
+    id: ID!
+    locations: [Location]!
+    logs: [Log!]!
+    started_at: DateTime
+    updated_at: DateTime!
+    user: User
+}
+
+"A paginated list of Navigation items."
+type NavigationPaginator {
+    "A list of Navigation items."
+    data: [Navigation!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type Note {
+    created_at: DateTime!
+    deleted_at: DateTime
+    details: String!
+    id: ID!
+    logs: [Log!]!
+    noteable: Noteable!
+    updated_at: DateTime!
+}
+
+type Order {
+    branch: Branch
+    branch_id: ID
+    branch_name: String
+    categories: [Category]!
+    category: Category
+    client_reference: String
+    courier: Courier
+    created_at: DateTime!
+    customer: User
+    deleted_at: DateTime
+    description: String
+    from_status: Int
+    id: ID!
+    is_priority: Boolean
+    logs: [Log!]!
+    month: Int
+    notes: [Note]
+    order_details: [OrderDetail]!
+    receipts: [Receipt]!
+    sale: Sale
+    status: Int
+    to_branch: Branch
+    total: Float
+    type: Int
+    updated_at: DateTime!
+    user: User
+    year: Int
+}
+
+type OrderDetail {
+    created_at: DateTime!
+    deleted_at: DateTime
+    hide_discount: Boolean
+    id: ID
+    logs: [Log!]!
+    order: Order!
+    original_qty: Float
+    preferred_unit: String
+    price: Price
+    price_adjustment: Float
+    product: Product
+    qty: Float
+    unit_qty: Float
+    updated_at: DateTime!
+}
+
+"A paginated list of Order items."
+type OrderPaginator {
+    "A list of Order items."
+    data: [Order!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type OrderSales {
+    date: Date
+    status: Int
+    total: Float
+}
+
+"Information about pagination using a Relay style cursor connection."
+type PageInfo {
+    "Number of nodes in the current page."
+    count: Int!
+    "Index of the current page."
+    currentPage: Int!
+    "The cursor to continue paginating forwards."
+    endCursor: String
+    "When paginating forwards, are there more items?"
+    hasNextPage: Boolean!
+    "When paginating backwards, are there more items?"
+    hasPreviousPage: Boolean!
+    "Index of the last available page."
+    lastPage: Int!
+    "The cursor to continue paginating backwards."
+    startCursor: String
+    "Total number of nodes in the paginated connection."
+    total: Int!
+}
+
+"Information about pagination using a fully featured paginator."
+type PaginatorInfo {
+    "Number of items in the current page."
+    count: Int!
+    "Index of the current page."
+    currentPage: Int!
+    "Index of the first item in the current page."
+    firstItem: Int
+    "Are there more pages after this one?"
+    hasMorePages: Boolean!
+    "Index of the last item in the current page."
+    lastItem: Int
+    "Index of the last available page."
+    lastPage: Int!
+    "Number of items per page."
+    perPage: Int!
+    "Number of total available items."
+    total: Int!
+}
+
+type Payment {
+    created_at: DateTime!
+    deleted_at: DateTime
+    deposits: [Deposit]!
+    id: ID!
+    logs: [Log!]!
+    payment_details: [PaymentDetail]
+    paymentable: Paymentable
+    sale: Sale
+    total: Float
+    updated_at: DateTime!
+}
+
+type PaymentDetail {
+    amount: Float!
+    created_at: DateTime!
+    deleted_at: DateTime
+    deposits: Deposit!
+    id: ID!
+    logs: [Log!]!
+    payment: Payment
+    payment_type: PaymentType!
+    updated_at: DateTime!
+}
+
+type PaymentType {
+    created_at: DateTime!
+    deleted_at: DateTime
+    description: String
+    id: ID!
+    logs: [Log!]!
+    name: String
+    payment_detail: [PaymentDetail]!
+    payments: [Payment]!
+    updated_at: DateTime!
+}
+
+type PendingProduct {
+    assembly: Int
+    bundle: Int
+    order: Int
+    remaining: Int
+    service: Int
+    stocks: Int
+}
+
+type Permission {
+    categories: [Category]
+    category: Category
+    category_id: ID
+    created_at: DateTime!
+    deleted_at: DateTime
+    description: String
+    field: String
+    guard_name: String
+    id: ID!
+    logs: [Log!]!
+    model: String
+    name: String
+    roles: [Role]
+    updated_at: DateTime!
+    users: [User]
+}
+
+"A paginated list of Permission items."
+type PermissionPaginator {
+    "A list of Permission items."
+    data: [Permission!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type Price {
+    amount: Float
+    created_at: DateTime
+    deleted_at: DateTime
+    effective_at: DateTime
+    id: ID!
+    logs: [Log!]!
+    price_group: PriceGroup
+    price_group_id: ID
+    product: Product
+    updated_at: DateTime
+    user: User
+}
+
+type PriceGroup {
+    branch: Branch
+    created_at: DateTime!
+    deleted_at: DateTime
+    id: ID!
+    logs: [Log!]!
+    name: String
+    price: Price
+    priceListGroup: [Price]
+    prices: [Price]!
+    updated_at: DateTime!
+    users: [User]!
+}
+
+"A paginated list of PriceGroup items."
+type PriceGroupPaginator {
+    "A list of PriceGroup items."
+    data: [PriceGroup!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type PrintLayout {
+    border: Boolean
+    company: Company
+    company_id: ID
+    created_at: String
+    data: JsonObj
+    date: Boolean
+    description: Boolean
+    id: ID!
+    layout_name: String
+}
+
+"A paginated list of PrintLayout items."
+type PrintLayoutPaginator {
+    "A list of PrintLayout items."
+    data: [PrintLayout!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type Product {
+    barcode: String
+    categories: [Category]
+    category: Category
+    characteristics: [Characteristic]!
+    company: Company
+    components: [ProductPackage]!
+    coverPhoto(default: Boolean = true): [Upload]!
+    created_at: DateTime!
+    deleted_at: DateTime
+    description: String
+    for_assembly: Int
+    for_freebies: Int
+    has_serial: Int
+    id: ID!
+    initial_product_cost: Float
+    inventories(where: ProductInventoriesWhereWhereConditions): [Inventory]!
+    inventory_adjustment: [InventoryAdjustment]
+    inventory_audit_detail(audit_id: Mixed): InventoryAuditDetail
+    inventory_audit_details(where: ProductInventoryAuditDetailsWhereWhereConditions): [InventoryAuditDetail]
+    inventory_order_point(where: ProductInventoryOrderPointWhereWhereConditions): [InventoryOrderPoint]
+    item_code: String
+    item_type: Int
+    latestPrices: [Price]!
+    logs: [Log!]!
+    package_type: Int
+    parents: [ProductPackage]!
+    pending(branch: Mixed): PendingProduct
+    price: Price
+    priceListGroup: [Price]
+    prices(where: ProductPricesWhereWhereConditions): [Price]!
+    racks: [Rack]!
+    reviews: [Review]!
+    totalQty(branch: Mixed, rack: Mixed): Float
+    unit: Unit
+    units: [Unit]
+    updated_at: DateTime!
+    uploads: [Upload]!
+    warranty: Int
+}
+
+type ProductPackage {
+    component: Product
+    id: ID!
+    logs: [Log!]!
+    product: Product
+    qty: Int
+}
+
+"A paginated list of Product items."
+type ProductPaginator {
+    "A list of Product items."
+    data: [Product!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type Promotion {
+    created_at: DateTime!
+    deleted_at: DateTime
+    id: ID!
+    logs: [Log!]!
+    updated_at: DateTime!
+}
+
+type Purchase {
+    branch: Branch
+    company: Company
+    created_at: DateTime
+    id: ID
+    logs: [Log!]!
+    receivables: [Receive!]!
+    status: Int
+    supplier: Company
+    supplier_branch: Branch
+    total: Float
+    updated_at: DateTime
+}
+
+type PurchaseDetail {
+    created_at: DateTime
+    id: ID
+    logs: [Log!]!
+    price: Price
+    price_adjustment: Float
+    product: Product
+    purchase: Purchase
+    qty: Float
+    updated_at: DateTime
+}
+
+type Query {
+    TenantInfo: Tenant
+    TerminalsFilter: [Terminal]!
+    ViewOrder(id: ID!): Order
+    ViewPaymentDetailInfo(id: ID!): PaymentDetail
+    ViewTheme(id: ID): Themes
+    accountTitles: [AccountTitle]!
+    accountTitlesPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        "The offset from which items are returned."
+        page: Int
+        trashed: Trashed
+        where: QueryAccountTitlesPaginateWhereWhereConditions
+    ): AccountTitlePaginator
+    address(id: ID): Address
+    addressesPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        "The offset from which items are returned."
+        page: Int
+        trashed: Trashed
+        where: QueryAddressesPaginateWhereWhereConditions
+    ): AddressPaginator
+    audit(id: ID!): Log
+    audits: [Log!]!
+    auditsPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        "The offset from which items are returned."
+        page: Int
+    ): LogPaginator
+    branch(id: ID): Branch
+    branchCount: Int!
+    branches: [Branch]
+    branchesPaginate(
+        criticalLevel: Boolean
+        "Limits number of fetched items."
+        first: Int!
+        "The offset from which items are returned."
+        page: Int
+        search: String
+        trashed: Trashed
+        where: QueryBranchesPaginateWhereWhereConditions
+    ): BranchPaginator
+    categories(
+        hasCharacteristics: QueryCategoriesHasCharacteristicsWhereHasConditions
+        search: String
+        where: QueryCategoriesWhereWhereConditions
+    ): [Category]!
+    categoriesPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        hasCharacteristics: QueryCategoriesPaginateHasCharacteristicsWhereHasConditions
+        orderBy: [QueryCategoriesPaginateOrderByOrderByClause!]
+        "The offset from which items are returned."
+        page: Int
+        trashed: Trashed
+        where: QueryCategoriesPaginateWhereWhereConditions
+    ): CategoryPaginator
+    characteristics: [Characteristic]!
+    characteristicsPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        orderBy: [QueryCharacteristicsPaginateOrderByOrderByClause!]
+        "The offset from which items are returned."
+        page: Int
+        trashed: Trashed
+        where: QueryCharacteristicsPaginateWhereWhereConditions
+    ): CharacteristicPaginator
+    clientCount: Int!
+    companies: [Company]!
+    companiesPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        "The offset from which items are returned."
+        page: Int
+        trashed: Trashed
+        where: QueryCompaniesPaginateWhereWhereConditions
+    ): CompanyPaginator
+    company(id: ID): Company
+    contactDetails: [ContactDetail]!
+    couriers: [Courier!]!
+    dashboardInventoryStockValue(
+        filters: InventoryStockValueInput
+        groupBy: InventoryStockValueGroupBy = DEFAULT
+        itemsPerPage: Int
+        orderBy: [InventoryStockValueOrderBy!]
+        page: Int
+        skip: Int
+        take: Int
+    ): [InventoryStockValue!]!
+    dashboardOrderSales(
+        filters: OrderSalesInput
+        groupBy: [OrderSalesGroupBy!] = [YEAR, MONTH, DAY, STATUS]
+        orderBy: [OrderSalesOrderBy!]
+        skip: Int
+        take: Int
+    ): [OrderSales!]!
+    deposits: [Deposit]!
+    destination(id: ID, trashed: String): Destination
+    destinations(navigation_id: ID!): [Destination!]!
+    domain(id: String): Domain
+    domains: [Domain!]!
+    domainsPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        "The offset from which items are returned."
+        page: Int
+        search: String
+        trashed: Trashed
+    ): DomainPaginator
+    inventories(
+        criticalLevel: Boolean
+        "Limits number of fetched items."
+        first: Int!
+        "The offset from which items are returned."
+        page: Int
+        search: String
+        where: QueryInventoriesWhereWhereConditions
+    ): InventoryPaginator
+    inventory(id: ID!): Inventory
+    inventoryAdjustments(where: QueryInventoryAdjustmentsWhereWhereConditions): [InventoryAdjustment]!
+    inventoryAuditDetailsPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        "The offset from which items are returned."
+        page: Int
+        where: QueryInventoryAuditDetailsPaginateWhereWhereConditions
+    ): InventoryAuditDetailPaginator
+    inventoryAuditsPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        "The offset from which items are returned."
+        page: Int
+        trashed: Trashed
+        where: QueryInventoryAuditsPaginateWhereWhereConditions
+    ): InventoryAuditPaginator
+    inventoryOrderPointsPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        "The offset from which items are returned."
+        page: Int
+        trashed: Trashed
+        where: QueryInventoryOrderPointsPaginateWhereWhereConditions
+    ): InventoryOrderPointPaginator
+    inventory_adjustment(id: ID!): InventoryAdjustment
+    inventory_adjustment_detail(id: ID!): InventoryAdjustmentDetail
+    inventory_adjustment_details: [InventoryAdjustmentDetail]!
+    inventory_audit(id: ID!): InventoryAudit
+    inventory_audit_detail(id: ID!): InventoryAuditDetail
+    inventory_audit_details: [InventoryAuditDetail]!
+    inventory_audits: [InventoryAudit]!
+    issue(id: ID!): InventoryAuditIssue
+    issues: [InventoryAuditIssue]!
+    labels: [Label!]!
+    labelsPaginate(
+        criticalLevel: Boolean
+        "Limits number of fetched items."
+        first: Int!
+        "The offset from which items are returned."
+        page: Int
+        search: String
+        trashed: Trashed
+        where: QueryLabelsPaginateWhereWhereConditions
+    ): LabelPaginator
+    lastProduct(limit: Int = 1): [Product]!
+    location(id: ID, trashed: String): Location
+    locations(navigation_id: ID): [Location!]!
+    me: User
+    message(id: ID): Message
+    messageRoom(id: ID, where: QueryMessageRoomWhereWhereConditions): MessageRoom
+    messageRooms: [MessageRoom]
+    messages: [Message]
+    messagesPaginate(
+        "A cursor after which elements are returned."
+        after: String
+        criticalLevel: Boolean
+        "Limits number of fetched items."
+        first: Int!
+        search: String
+        trashed: Trashed
+        where: QueryMessagesPaginateWhereWhereConditions
+    ): MessageConnection
+    navigation(id: ID, trashed: String): Navigation
+    navigations(
+        "Limits number of fetched items."
+        first: Int = 25
+        "The offset from which items are returned."
+        page: Int
+    ): NavigationPaginator
+    orderDetails: [OrderDetail]
+    orders(monthlyTotal: OrdersTotalInput, orderBy: [QueryOrdersOrderByOrderByClause!]): [Order]!
+    ordersPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        orderBy: [QueryOrdersPaginateOrderByOrderByClause!]
+        "The offset from which items are returned."
+        page: Int
+        where: QueryOrdersPaginateWhereWhereConditions
+    ): OrderPaginator
+    paymentDetails: [PaymentDetail]!
+    paymentTypes: [PaymentType]!
+    payments: [Payment]
+    permissions(trashed: Trashed, where: QueryPermissionsWhereWhereConditions): [Permission]!
+    permissionsPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        "The offset from which items are returned."
+        page: Int
+        where: QueryPermissionsPaginateWhereWhereConditions
+    ): PermissionPaginator
+    priceGroup(id: ID, trashed: String): PriceGroup
+    priceGroups: [PriceGroup]!
+    priceGroupsPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        orderBy: [QueryPriceGroupsPaginateOrderByOrderByClause!]
+        "The offset from which items are returned."
+        page: Int
+        where: QueryPriceGroupsPaginateWhereWhereConditions
+    ): PriceGroupPaginator
+    prices: [Price!]!
+    printLayout(id: ID): PrintLayout
+    printLayoutPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        "The offset from which items are returned."
+        page: Int
+        search: String
+        trashed: Trashed
+    ): PrintLayoutPaginator
+    printLayouts: [PrintLayout!]!
+    product(id: ID, trashed: String): Product
+    productCount: Int!
+    productPackages: [ProductPackage]!
+    productReviews(
+        "Limits number of fetched items."
+        first: Int!
+        "The offset from which items are returned."
+        page: Int
+        product_id: ID
+    ): ReviewPaginator
+    products(search: String, where: QueryProductsWhereWhereConditions): [Product]!
+    productsPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        orderBy: [QueryProductsPaginateOrderByOrderByClause!]
+        "The offset from which items are returned."
+        page: Int
+        search: String
+        trashed: Trashed
+        where: QueryProductsPaginateWhereWhereConditions
+    ): ProductPaginator
+    purchaseDetails(company_id: ID): [PurchaseDetail]!
+    purchases(company_id: ID): [Purchase]!
+    rack(id: ID!): Rack
+    racks(where: QueryRacksWhereWhereConditions): [Rack]!
+    racksPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        orderBy: [QueryRacksPaginateOrderByOrderByClause!]
+        "The offset from which items are returned."
+        page: Int
+        trashed: Trashed
+        where: QueryRacksPaginateWhereWhereConditions
+    ): RackPaginator
+    receiptBooks: [ReceiptBook]!
+    receiptBooksPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        "The offset from which items are returned."
+        page: Int
+        trashed: Trashed
+        where: QueryReceiptBooksPaginateWhereWhereConditions
+    ): ReceiptBookPaginator
+    receipts: [Receipt!]!
+    receiptsPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        "The offset from which items are returned."
+        page: Int
+        trashed: Trashed
+        where: QueryReceiptsPaginateWhereWhereConditions
+    ): ReceiptPaginator
+    receiveDetails(company_id: ID): [ReceiveDetail]!
+    receives(company_id: ID): [Receive]!
+    return(id: ID!): Return
+    returns: [Return]!
+    review(id: ID): Review
+    role(id: ID): Role
+    roles: [Role]
+    rolesPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        "The offset from which items are returned."
+        page: Int
+        trashed: Trashed
+        where: QueryRolesPaginateWhereWhereConditions
+    ): RolePaginator
+    sales: [Sale]!
+    salesPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        "The offset from which items are returned."
+        page: Int
+        trashed: Trashed
+    ): SalePaginator
+    searchCategory(search: String, where: QuerySearchCategoryWhereWhereConditions): [Category]!
+    tags: [Tag]!
+    tagsPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        "The offset from which items are returned."
+        page: Int
+        trashed: Trashed
+        where: QueryTagsPaginateWhereWhereConditions
+    ): TagPaginator
+    tenant(id: ID!): Tenant
+    tenants: [Tenant!]!
+    tenantsPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        "The offset from which items are returned."
+        page: Int
+        search: String
+        trashed: Trashed
+    ): TenantPaginator
+    terminal(id: ID): Terminal
+    terminalsPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        "The offset from which items are returned."
+        page: Int
+        trashed: Trashed
+        where: QueryTerminalsPaginateWhereWhereConditions
+    ): TerminalPaginator
+    transferInventoriesPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        "The offset from which items are returned."
+        page: Int
+        where: QueryTransferInventoriesPaginateWhereWhereConditions
+    ): TransferInventoryPaginator
+    unit(id: ID!): Unit
+    units(company_id: ID, scope: String): [Unit]!
+    unitsPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        orderBy: [QueryUnitsPaginateOrderByOrderByClause!]
+        "The offset from which items are returned."
+        page: Int
+        trashed: Trashed
+        where: QueryUnitsPaginateWhereWhereConditions
+    ): UnitPaginator
+    uploads(groupBy: String, where: QueryUploadsWhereWhereConditions): [Upload]!
+    user(id: ID): User
+    userNavigations(user_id: ID!): [Navigation!]!
+    userReviews(
+        "Limits number of fetched items."
+        first: Int!
+        "The offset from which items are returned."
+        page: Int
+        user_id: ID
+    ): ReviewPaginator
+    userSearch(search: String): [User!]!
+    users(where: QueryUsersWhereWhereConditions): [User!]!
+    usersPaginate(
+        "Limits number of fetched items."
+        first: Int!
+        "The offset from which items are returned."
+        page: Int
+        search: String
+        trashed: Trashed
+        where: QueryUsersPaginateWhereWhereConditions
+    ): UserPaginator
+    usersRelay(
+        "A cursor after which elements are returned."
+        after: String
+        "Limits number of fetched items."
+        first: Int!
+        search: String
+        trashed: Trashed
+        where: QueryUsersRelayWhereWhereConditions
+    ): UserConnection
+    viewAccountTitleInfo(id: ID!): AccountTitle
+    viewPaymentInfo(id: ID!): Payment
+}
+
+type Quota {
+    amount: Int
+    frequency: String
+    logs: [Log!]!
+    name: String
+    quotaable: Quotaable!
+}
+
+type Rack {
+    branch(trashed: Trashed, where: RackBranchWhereWhereConditions): Branch
+    branch_id: ID
+    categories: [Category]
+    category: Category
+    created_at: DateTime
+    deleted_at: DateTime
+    description: String
+    id: ID
+    inventories: [Inventory]!
+    inventory_audit: InventoryAudit
+    inventory_audits: [InventoryAudit]
+    is_default: Int
+    logs: [Log!]!
+    name: String
+    updated_at: DateTime
+    users: [User]!
+}
+
+"A paginated list of Rack items."
+type RackPaginator {
+    "A list of Rack items."
+    data: [Rack!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type Receipt {
+    created_at: DateTime
+    deleted_at: DateTime
+    id: ID
+    logs: [Log!]!
+    number: Int
+    receipt_book: ReceiptBook
+    receiptable: Receiptable
+    updated_at: DateTime
+}
+
+type ReceiptBook {
+    active: Boolean
+    created_at: DateTime
+    current: Int
+    deleted_at: DateTime
+    description: String
+    end: Int
+    id: ID!
+    limit: Int
+    logs: [Log!]!
+    receipt_bookable: ReceiptBookable
+    receipts: Receipt
+    start: Int
+    type: String
+    updated_at: DateTime
+}
+
+"A paginated list of ReceiptBook items."
+type ReceiptBookPaginator {
+    "A list of ReceiptBook items."
+    data: [ReceiptBook!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+"A paginated list of Receipt items."
+type ReceiptPaginator {
+    "A list of Receipt items."
+    data: [Receipt!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type Receive {
+    branch: Branch
+    created_at: DateTime
+    id: ID
+    logs: [Log!]!
+    receivable: Receivable
+    status: Int
+    updated_at: DateTime
+    user: User
+}
+
+type ReceiveDetail {
+    created_at: DateTime
+    id: ID
+    issue_type: Int
+    logs: [Log!]!
+    product: Product
+    purchase: Receive
+    qty: Float
+    updated_at: DateTime
+}
+
+type Return {
+    created_at: DateTime!
+    deleted_at: DateTime
+    id: ID
+    issue_type: Int
+    logs: [Log!]!
+    order: Order
+    order_detail: OrderDetail
+    product: Product
+    qty: Float
+    remarks: String
+    return_type: Int
+    updated_at: DateTime!
+}
+
+type Review {
+    comment: String!
+    created_at: DateTime!
+    deleted_at: DateTime
+    id: ID!
+    logs: [Log!]!
+    product: Product!
+    rate: Int
+    title: String!
+    updated_at: DateTime!
+    user: User!
+}
+
+"A paginated list of Review items."
+type ReviewPaginator {
+    "A list of Review items."
+    data: [Review!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type Role {
+    created_at: DateTime!
+    deleted_at: DateTime
+    description: String
+    guard_name: String
+    id: ID
+    logs: [Log!]!
+    name: String!
+    permissions: [Permission]
+    updated_at: DateTime!
+    users: [User]
+}
+
+"A paginated list of Role items."
+type RolePaginator {
+    "A list of Role items."
+    data: [Role!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type Sale {
+    amount_paid: Float
+    categories: [Category]!
+    category: Category
+    couriers: [Courier]!
+    created_at: DateTime!
+    deleted_at: DateTime
+    id: ID!
+    logs: [Log!]!
+    order_details: [OrderDetail]!
+    orders: [Order]!
+    payments: [Payment]!
+    total: Float!
+    updated_at: DateTime!
+}
+
+"A paginated list of Sale items."
+type SalePaginator {
+    "A list of Sale items."
+    data: [Sale!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type Schedule {
+    agenda: String!
+    created_at: DateTime!
+    deleted_at: DateTime
+    id: ID!
+    logs: [Log!]!
+    notes: [Note!]!
+    schedule: DateTime!
+    scheduleable: Scheduleable!
+    updated_at: DateTime!
+}
+
+"Information about pagination using a simple paginator."
+type SimplePaginatorInfo {
+    "Number of items in the current page."
+    count: Int!
+    "Index of the current page."
+    currentPage: Int!
+    "Index of the first item in the current page."
+    firstItem: Int
+    "Are there more pages after this one?"
+    hasMorePages: Boolean!
+    "Index of the last item in the current page."
+    lastItem: Int
+    "Number of items per page."
+    perPage: Int!
+}
+
+type SocialAccount {
+    id: ID!
+    provider_id: String!
+    provider_name: String!
+    user: User
+}
+
+type Subscription {
+    branchUpdated(id: ID): Branch
+    messageRoomUpserted(input: MessageRoomUpsertedInput): MessageRoom
+    messageUpserted(input: MessageUpsertedInput): Message
+}
+
+type Tag {
+    branches: [Branch]!
+    created_at: DateTime!
+    deleted_at: DateTime
+    id: ID!
+    logs: [Log!]!
+    name: String!
+    products: [Product]!
+    scope: String
+    updated_at: DateTime!
+}
+
+"A paginated list of Tag items."
+type TagPaginator {
+    "A list of Tag items."
+    data: [Tag!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type Tenant {
+    created_at: String
+    domains: [Domain]
+    id: ID!
+    me: Tenant
+    plan: String
+    tenancy_db_name: String
+    updated_at: String
+}
+
+"A paginated list of Tenant items."
+type TenantPaginator {
+    "A list of Tenant items."
+    data: [Tenant!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type Terminal {
+    branch: Branch
+    created_at: DateTime
+    deleted_at: DateTime
+    id: ID!
+    is_assigned: Int
+    logs: [Log!]!
+    name: String
+    receipt_books: [ReceiptBook]!
+    updated_at: DateTime
+}
+
+"A paginated list of Terminal items."
+type TerminalPaginator {
+    "A list of Terminal items."
+    data: [Terminal!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type Themes {
+    color: String
+    company: Company
+    created_at: String
+    deleted_at: String
+    id: ID!
+    logs: [Log!]!
+    side_nav: String
+    side_nav_child: String
+    updated_at: String
+}
+
+type TransferInventory {
+    branch_from: Branch
+    branch_to: Branch
+    courier: Courier
+    created_at: DateTime!
+    deleted_at: DateTime
+    from_status: Int
+    id: ID!
+    schedules: [Schedule]
+    status: Int
+    transfer_inventory_details: [TransferInventoryDetail]!
+    type: Int
+    updated_at: DateTime!
+    user: User
+}
+
+type TransferInventoryDetail {
+    created_at: DateTime!
+    deleted_at: DateTime
+    from_racks: [TransferInventoryDetailRack]
+    id: ID
+    product: Product
+    qty: Float
+    to_racks: [TransferInventoryDetailRack]
+    transfer_inventory: TransferInventory
+    updated_at: DateTime!
+}
+
+type TransferInventoryDetailRack {
+    created_at: DateTime!
+    deleted_at: DateTime
+    id: ID
+    qty: Float
+    rack_from: Rack
+    rack_to: Rack
+    transfer_inventory_detail: TransferInventoryDetail
+    updated_at: DateTime!
+}
+
+"A paginated list of TransferInventory items."
+type TransferInventoryPaginator {
+    "A list of TransferInventory items."
+    data: [TransferInventory!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type TransferRackOutput {
+    new: Inventory
+    old: Inventory
+    update: Inventory
+}
+
+type Unit {
+    company: Company
+    created_at: DateTime
+    deleted_at: DateTime
+    description: String
+    id: ID
+    is_decimal: Int
+    logs: [Log!]!
+    name: String
+    products: [Product]!
+    scope: String
+    unitables: Unitables
+    updated_at: DateTime
+}
+
+"A paginated list of Unit items."
+type UnitPaginator {
+    "A list of Unit items."
+    data: [Unit!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type Upload {
+    created_at: DateTime!
+    default: Int
+    deleted_at: DateTime
+    filename: String!
+    id: ID!
+    logs: [Log!]!
+    name: String!
+    tag: String
+    updated_at: DateTime!
+    uploadable: Uploadable!
+    url: String!
+    user: User
+}
+
+type User {
+    address: Address
+    addresses: [Address]!
+    age: Int
+    avatar: String
+    birthday: Date
+    branches: [Branch]!
+    categories: [Category]!
+    companies: [Company]!
+    contact_detail: ContactDetail
+    contact_details: [ContactDetail]!
+    created_at: DateTime!
+    deleted_at: DateTime
+    email: Email
+    first_name: String
+    gender: String
+    id: ID!
+    is_courier: Boolean
+    is_customer: Boolean
+    is_seller: Boolean
+    last_name: String
+    logs: [Log!]!
+    message_room(id: ID): MessageRoom
+    message_room_pivot: MessageRoomPivot
+    message_rooms(
+        "A cursor after which elements are returned."
+        after: String
+        "Limits number of fetched items."
+        first: Int!
+        search: String
+        where: UserMessageRoomsWhereWhereConditions
+    ): MessageRoomConnection
+    messages: [Message]!
+    middle_name: String
+    name: String
+    nickname: String
+    password: String
+    permissions: [Permission]!
+    points: Float
+    price_group: PriceGroup
+    quotas: [Quota]
+    racks: [Rack]!
+    referrals: [User]!
+    referrer: User
+    referrers: [User]!
+    reviews: [Review]!
+    roles: [Role]!
+    social_accounts: [SocialAccount]!
+    unreadMessageRooms: Int
+    updated_at: DateTime!
+    uploads: [Upload]!
+    username: String
+    wallets: [Wallet]!
+}
+
+"A paginated list of User edges."
+type UserConnection {
+    "A list of User edges."
+    edges: [UserEdge!]!
+    "Pagination information about the list of edges."
+    pageInfo: PageInfo!
+}
+
+"An edge that contains a node of type User and a cursor."
+type UserEdge {
+    "A unique cursor that can be used for pagination."
+    cursor: String!
+    "The User node."
+    node: User!
+}
+
+"A paginated list of User items."
+type UserPaginator {
+    "A list of User items."
+    data: [User!]!
+    "Pagination information about the list of items."
+    paginatorInfo: PaginatorInfo!
+}
+
+type Wallet {
+    balance: Float!
+    created_at: DateTime!
+    deleted_at: DateTime
+    deposits: [Deposit]!
+    details: String!
+    id: ID!
+    logs: [Log!]!
+    name: String!
+    payment_details: [PaymentDetail]!
+    payment_type: PaymentType
+    payments: [Payment]!
+    updated_at: DateTime!
+    walletable: Walletable!
+}
+
+"Allowed column names for Branch.inventories.where."
+enum BranchInventoriesWhereColumn {
+    ID
+    ITEM_CODE
+    NAME
+}
+
+"Allowed column names for InventoryAdjustment.details.where."
+enum InventoryAdjustmentDetailsWhereColumn {
+    ISSUE_TYPE
+}
+
+"Allowed column names for InventoryAudit.details.where."
+enum InventoryAuditDetailsWhereColumn {
+    ITEM_CODE
+}
+
+"Allowed column names for InventoryAudit.inventory_adjustments.where."
+enum InventoryAuditInventoryAdjustmentsWhereColumn {
+    STATUS
+}
+
+"Allowed column names for InventoryAudit.issues.where."
+enum InventoryAuditIssuesWhereColumn {
+    ISSUE_TYPE
+    ITEM_CODE
+}
+
+"Allowed column names for Inventory.product.where."
+enum InventoryProductWhereColumn {
+    BRANCH_ID
+}
+
+enum InventoryStockValueColumns {
+    BRANCH
+    ITEM
+    TOTAL
+}
+
+enum InventoryStockValueGroupBy {
+    BRANCH
+    DEFAULT
+    ITEM
+}
+
+enum OrderBy {
+    ASC
+    DESC
+}
+
+"Aggregate functions when ordering by a relation without specifying a column."
+enum OrderByRelationAggregateFunction {
+    "Amount of items."
+    COUNT
+}
+
+"Aggregate functions when ordering by a relation that may specify a column."
+enum OrderByRelationWithColumnAggregateFunction {
+    "Average."
+    AVG
+    "Amount of items."
+    COUNT
+    "Maximum."
+    MAX
+    "Minimum."
+    MIN
+    "Sum."
+    SUM
+}
+
+enum OrderSalesColumns {
+    DATE
+    STATUS
+    TOTAL
+}
+
+enum OrderSalesGroupBy {
+    DAY
+    MONTH
+    STATUS
+    YEAR
+}
+
+"Allowed column names for Product.inventories.where."
+enum ProductInventoriesWhereColumn {
+    ID
+    ISSUE_TYPE
+    RACK_ID
+}
+
+"Allowed column names for Product.inventory_audit_details.where."
+enum ProductInventoryAuditDetailsWhereColumn {
+    INVENTORY_AUDIT_ID
+}
+
+"Allowed column names for Product.inventory_order_point.where."
+enum ProductInventoryOrderPointWhereColumn {
+    BRANCH_ID
+}
+
+"Allowed column names for Product.prices.where."
+enum ProductPricesWhereColumn {
+    ID
+    PRICE_GROUP_ID
+    USER_ID
+}
+
+"Allowed column names for Query.accountTitlesPaginate.where."
+enum QueryAccountTitlesPaginateWhereColumn {
+    CODE
+    DESCRIPTION
+    NAME
+}
+
+"Allowed column names for Query.addressesPaginate.where."
+enum QueryAddressesPaginateWhereColumn {
+    COMPLETE_ADDRESS
+    NAME
+    REGION
+}
+
+"Allowed column names for Query.branchesPaginate.where."
+enum QueryBranchesPaginateWhereColumn {
+    ID
+    ITEM_CODE
+    NAME
+}
+
+"Allowed column names for Query.categories.hasCharacteristics."
+enum QueryCategoriesHasCharacteristicsColumn {
+    CHARACTERISTICS
+}
+
+"Allowed column names for Query.categoriesPaginate.hasCharacteristics."
+enum QueryCategoriesPaginateHasCharacteristicsColumn {
+    CHARACTERISTICS
+}
+
+"Allowed column names for Query.categoriesPaginate.orderBy."
+enum QueryCategoriesPaginateOrderByColumn {
+    DESCRIPTION
+    ID
+    NAME
+}
+
+"Allowed column names for Query.categoriesPaginate.where."
+enum QueryCategoriesPaginateWhereColumn {
+    NAME
+    PARENT_ID
+    SCOPE
+}
+
+"Allowed column names for Query.categories.where."
+enum QueryCategoriesWhereColumn {
+    NAME
+    PARENT_ID
+    SCOPE
+}
+
+"Allowed column names for Query.characteristicsPaginate.orderBy."
+enum QueryCharacteristicsPaginateOrderByColumn {
+    DESCRIPTION
+    NAME
+}
+
+"Allowed column names for Query.characteristicsPaginate.where."
+enum QueryCharacteristicsPaginateWhereColumn {
+    DESCRIPTION
+    ID
+    NAME
+    SCOPE
+}
+
+"Allowed column names for Query.companiesPaginate.where."
+enum QueryCompaniesPaginateWhereColumn {
+    NAME
+}
+
+"Allowed column names for Query.inventories.where."
+enum QueryInventoriesWhereColumn {
+    ISSUE_TYPE
+    ITEM_CODE
+    PRODUCT_ID
+    QTY
+    RACK_ID
+}
+
+"Allowed column names for Query.inventoryAdjustments.where."
+enum QueryInventoryAdjustmentsWhereColumn {
+    PRODUCT_ID
+    STATUS
+}
+
+"Allowed column names for Query.inventoryAuditDetailsPaginate.where."
+enum QueryInventoryAuditDetailsPaginateWhereColumn {
+    ACTION
+    DESCRIPTION
+    ID
+    ITEM_CODE
+    PRODUCT_ID
+    RACK_ID
+}
+
+"Allowed column names for Query.inventoryAuditsPaginate.where."
+enum QueryInventoryAuditsPaginateWhereColumn {
+    ID
+    ISSUE_STATUS
+    ISSUE_TYPE
+    ITEM_CODE
+    STATUS
+}
+
+"Allowed column names for Query.inventoryOrderPointsPaginate.where."
+enum QueryInventoryOrderPointsPaginateWhereColumn {
+    BRANCH_ID
+    ITEM_CODE
+}
+
+"Allowed column names for Query.labelsPaginate.where."
+enum QueryLabelsPaginateWhereColumn {
+    ALIAS
+    ID
+    NAME
+}
+
+"Allowed column names for Query.messageRoom.where."
+enum QueryMessageRoomWhereColumn {
+    ID
+    NAME
+    PEER
+}
+
+"Allowed column names for Query.messagesPaginate.where."
+enum QueryMessagesPaginateWhereColumn {
+    CONTENT
+    FIRST_NAME
+    ID
+    TITLE
+    USER_ID
+}
+
+"Allowed column names for Query.orders.orderBy."
+enum QueryOrdersOrderByColumn {
+    MONTH
+    YEAR
+}
+
+"Allowed column names for Query.ordersPaginate.orderBy."
+enum QueryOrdersPaginateOrderByColumn {
+    ID
+    STATUS
+}
+
+"Allowed column names for Query.ordersPaginate.where."
+enum QueryOrdersPaginateWhereColumn {
+    STATUS
+}
+
+"Allowed column names for Query.permissionsPaginate.where."
+enum QueryPermissionsPaginateWhereColumn {
+    DESCRIPTION
+    NAME
+}
+
+"Allowed column names for Query.permissions.where."
+enum QueryPermissionsWhereColumn {
+    DESCRIPTION
+    FIELD
+    ID
+    MODEL
+    NAME
+}
+
+"Allowed column names for Query.priceGroupsPaginate.orderBy."
+enum QueryPriceGroupsPaginateOrderByColumn {
+    ID
+    NAME
+}
+
+"Allowed column names for Query.priceGroupsPaginate.where."
+enum QueryPriceGroupsPaginateWhereColumn {
+    ID
+    NAME
+}
+
+"Allowed column names for Query.productsPaginate.orderBy."
+enum QueryProductsPaginateOrderByColumn {
+    BARCODE
+    DESCRIPTION
+    ID
+    ITEM_CODE
+}
+
+"Allowed column names for Query.productsPaginate.where."
+enum QueryProductsPaginateWhereColumn {
+    DESCRIPTION
+    ID
+    ITEM_CODE
+    PACKAGE_TYPE
+}
+
+"Allowed column names for Query.products.where."
+enum QueryProductsWhereColumn {
+    BARCODE
+    DESCRIPTION
+    ID
+    ITEM_CODE
+    PACKAGE_TYPE
+}
+
+"Allowed column names for Query.racksPaginate.orderBy."
+enum QueryRacksPaginateOrderByColumn {
+    DESCRIPTION
+    ID
+    NAME
+}
+
+"Allowed column names for Query.racksPaginate.where."
+enum QueryRacksPaginateWhereColumn {
+    BRANCH_ID
+    CATEGORIES
+    ID
+    NAME
+}
+
+"Allowed column names for Query.racks.where."
+enum QueryRacksWhereColumn {
+    BRANCH_ID
+    ID
+    NAME
+}
+
+"Allowed column names for Query.receiptBooksPaginate.where."
+enum QueryReceiptBooksPaginateWhereColumn {
+    DESCRIPTION
+    TYPE
+}
+
+"Allowed column names for Query.receiptsPaginate.where."
+enum QueryReceiptsPaginateWhereColumn {
+    NUMBER
+}
+
+"Allowed column names for Query.rolesPaginate.where."
+enum QueryRolesPaginateWhereColumn {
+    DESCRIPTION
+    NAME
+}
+
+"Allowed column names for Query.searchCategory.where."
+enum QuerySearchCategoryWhereColumn {
+    NAME
+    PARENT_ID
+    SCOPE
+}
+
+"Allowed column names for Query.tagsPaginate.where."
+enum QueryTagsPaginateWhereColumn {
+    NAME
+    SCOPE
+}
+
+"Allowed column names for Query.terminalsPaginate.where."
+enum QueryTerminalsPaginateWhereColumn {
+    DESCRIPTION
+    NAME
+}
+
+"Allowed column names for Query.transferInventoriesPaginate.where."
+enum QueryTransferInventoriesPaginateWhereColumn {
+    BRANCH_TO_ID
+    STATUS
+}
+
+"Allowed column names for Query.unitsPaginate.orderBy."
+enum QueryUnitsPaginateOrderByColumn {
+    DESCRIPTION
+    NAME
+}
+
+"Allowed column names for Query.unitsPaginate.where."
+enum QueryUnitsPaginateWhereColumn {
+    DESCRIPTION
+    NAME
+    SCOPE
+}
+
+"Allowed column names for Query.uploads.where."
+enum QueryUploadsWhereColumn {
+    TAG
+    UPLOADABLE_TYPE
+}
+
+"Allowed column names for Query.usersPaginate.where."
+enum QueryUsersPaginateWhereColumn {
+    FIRST_NAME
+    IS_COURIER
+    IS_CUSTOMER
+    IS_SELLER
+    LAST_NAME
+    MIDDLE_NAME
+}
+
+"Allowed column names for Query.usersRelay.where."
+enum QueryUsersRelayWhereColumn {
+    FIRST_NAME
+    ID
+    IS_COURIER
+    IS_CUSTOMER
+    IS_SELLER
+    LAST_NAME
+    MIDDLE_NAME
+}
+
+"Allowed column names for Query.users.where."
+enum QueryUsersWhereColumn {
+    ID
+    IS_COURIER
+    IS_CUSTOMER
+    IS_SELLER
+}
+
+"Allowed column names for Rack.branch.where."
+enum RackBranchWhereColumn {
+    ID
+}
+
+"The available SQL operators that are used to filter query results."
+enum SQLOperator {
+    "Whether a value is within a range of values (`BETWEEN`)"
+    BETWEEN
+    "Equal operator (`=`)"
+    EQ
+    "Greater than operator (`>`)"
+    GT
+    "Greater than or equal operator (`>=`)"
+    GTE
+    "Whether a value is within a set of values (`IN`)"
+    IN
+    "Whether a value is not null (`IS NOT NULL`)"
+    IS_NOT_NULL
+    "Whether a value is null (`IS NULL`)"
+    IS_NULL
+    "Simple pattern matching (`LIKE`)"
+    LIKE
+    "Less than operator (`<`)"
+    LT
+    "Less than or equal operator (`<=`)"
+    LTE
+    "Not equal operator (`!=`)"
+    NEQ
+    "Whether a value is not within a range of values (`NOT BETWEEN`)"
+    NOT_BETWEEN
+    "Whether a value is not within a set of values (`NOT IN`)"
+    NOT_IN
+    "Negation of simple pattern matching (`NOT LIKE`)"
+    NOT_LIKE
+}
+
+"Directions for ordering a list of records."
+enum SortOrder {
+    "Sort records in ascending order."
+    ASC
+    "Sort records in descending order."
+    DESC
+}
+
+"Specify if you want to include or exclude trashed results from a query."
+enum Trashed {
+    "Only return trashed results."
+    ONLY
+    "Return both trashed and non-trashed results."
+    WITH
+    "Only return non-trashed results."
+    WITHOUT
+}
+
+"Allowed column names for User.message_rooms.where."
+enum UserMessageRoomsWhereColumn {
+    FIRST_NAME
+    ID
+    LAST_NAME
+    NAME
+}
+
+"A date string with format `Y-m-d`, e.g. `2011-05-23`."
+scalar Date
+
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime
+
+"A datetime and timezone string in ISO 8601 format `Y-m-dTH:i:sO`, e.g. `2020-04-20T13:53:12+02:00`."
+scalar DateTimeTz
+
+"A [RFC 5321](https://tools.ietf.org/html/rfc5321) compliant email."
+scalar Email
+
+"""
+The `JSON` scalar type represents JSON values as specified by
+[ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JsonObj
+
+"Arbitrary data encoded in JavaScript Object Notation. See https://www.json.org."
+scalar JsonStr
+
+"""
+Loose type that allows any value. Be careful when passing in large `Int` or `Float` literals,
+as they may not be parsed correctly on the server side. Use `String` literals if you are
+dealing with really large numbers to be on the safe side.
+"""
+scalar Mixed
+
+input AccountTitleInput {
+    categories: ConnectCategoryRelation
+    children: ConnectAccountTitleRelation
+    code: String
+    company: ConnectCompanyRelation
+    description: String
+    id: ID
+    name: String
+    parent: ConnectAccountTitleRelation
+    status: Int
+}
+
+input AddressInput {
+    addressable: ConnectAddressRelation
+    barangay: String
+    building: String
+    city: String
+    country: String
+    floor: String
+    id: ID
+    landmark: String
     latitude: Float
     longitude: Float
     name: String
     region: String
+    street: String
+    subdivision: String
+    unit: String
+    zip: String
 }
 
-type Mass {
-    kg: Int
-    lb: Int
-}
-
-type Mission {
+input BranchInput {
+    addresses: ConnectAddressRelation
+    code: String
+    contact_details: ConnectContactDetailRelation
     description: String
+    followers_count: Int
     id: ID
-    manufacturers: [String]
     name: String
-    payloads: [Payload]
-    twitter: String
-    website: String
-    wikipedia: String
-}
-
-type MissionResult {
-    data: [Mission]
-    result: Result
-}
-
-type Mutation {
-    "delete data from the table: \"users\""
-    delete_users("filter the rows which have to be deleted" where: users_bool_exp!): users_mutation_response
-    "insert data into the table: \"users\""
-    insert_users(
-        "the rows to be inserted"
-        objects: [users_insert_input!]!
-        "on conflict condition"
-        on_conflict: users_on_conflict
-    ): users_mutation_response
-    "update data of the table: \"users\""
-    update_users(
-        "sets the columns of the filtered rows to the given values"
-        _set: users_set_input
-        "filter the rows which have to be updated"
-        where: users_bool_exp!
-    ): users_mutation_response
-}
-
-type Payload {
-    customers: [String]
-    id: ID
-    manufacturer: String
-    nationality: String
-    norad_id: [Int]
-    orbit: String
-    orbit_params: PayloadOrbitParams
-    payload_mass_kg: Float
-    payload_mass_lbs: Float
-    payload_type: String
-    reused: Boolean
-}
-
-type PayloadOrbitParams {
-    apoapsis_km: Float
-    arg_of_pericenter: Float
-    eccentricity: Float
-    epoch: Date
-    inclination_deg: Float
-    lifespan_years: Float
-    longitude: Float
-    mean_anomaly: Float
-    mean_motion: Float
-    periapsis_km: Float
-    period_min: Float
-    raan: Float
-    reference_system: String
-    regime: String
-    semi_major_axis_km: Float
-}
-
-type Query {
-    capsule(id: ID!): Capsule
-    capsules(find: CapsulesFind, limit: Int, offset: Int, order: String, sort: String): [Capsule]
-    capsulesPast(find: CapsulesFind, limit: Int, offset: Int, order: String, sort: String): [Capsule]
-    capsulesUpcoming(find: CapsulesFind, limit: Int, offset: Int, order: String, sort: String): [Capsule]
-    company: Info
-    core(id: ID!): Core
-    cores(find: CoresFind, limit: Int, offset: Int, order: String, sort: String): [Core]
-    coresPast(find: CoresFind, limit: Int, offset: Int, order: String, sort: String): [Core]
-    coresUpcoming(find: CoresFind, limit: Int, offset: Int, order: String, sort: String): [Core]
-    dragon(id: ID!): Dragon
-    dragons(limit: Int, offset: Int): [Dragon]
-    histories(find: HistoryFind, limit: Int, offset: Int, order: String, sort: String): [History]
-    historiesResult(find: HistoryFind, limit: Int, offset: Int, order: String, sort: String): HistoriesResult
-    history(id: ID!): History
-    landpad(id: ID!): Landpad
-    landpads(limit: Int, offset: Int): [Landpad]
-    launch(id: ID!): Launch
-    launchLatest(offset: Int): Launch
-    launchNext(offset: Int): Launch
-    launches(find: LaunchFind, limit: Int, offset: Int, order: String, sort: String): [Launch]
-    launchesPast(find: LaunchFind, limit: Int, offset: Int, order: String, sort: String): [Launch]
-    launchesPastResult(
-        find: LaunchFind
-        limit: Int
-        offset: Int
-        order: String
-        sort: String
-    ): LaunchesPastResult
-    launchesUpcoming(find: LaunchFind, limit: Int, offset: Int, order: String, sort: String): [Launch]
-    launchpad(id: ID!): Launchpad
-    launchpads(limit: Int, offset: Int): [Launchpad]
-    mission(id: ID!): Mission
-        @deprecated(reason: "Mission is not available on REST API after MongoDB deprecation")
-    missions(find: MissionsFind, limit: Int, offset: Int): [Mission]
-        @deprecated(reason: "Mission is not available on REST API after MongoDB deprecation")
-    missionsResult(find: MissionsFind, limit: Int, offset: Int): MissionResult
-        @deprecated(reason: "Mission is not available on REST API after MongoDB deprecation")
-    payload(id: ID!): Payload
-    payloads(find: PayloadsFind, limit: Int, offset: Int, order: String, sort: String): [Payload]
-    roadster: Roadster
-    rocket(id: ID!): Rocket
-    rockets(limit: Int, offset: Int): [Rocket]
-    rocketsResult(limit: Int, offset: Int): RocketsResult
-    ship(id: ID!): Ship
-    ships(find: ShipsFind, limit: Int, offset: Int, order: String, sort: String): [Ship]
-    shipsResult(find: ShipsFind, limit: Int, offset: Int, order: String, sort: String): ShipsResult
-    "fetch data from the table: \"users\""
-    users(
-        "distinct select on columns"
-        distinct_on: [users_select_column!]
-        "limit the nuber of rows returned"
-        limit: Int
-        "skip the first n rows. Use only with order_by"
-        offset: Int
-        "sort the rows by one or more columns"
-        order_by: [users_order_by!]
-        "filter the rows returned"
-        where: users_bool_exp
-    ): [users!]!
-    "fetch aggregated fields from the table: \"users\""
-    users_aggregate(
-        "distinct select on columns"
-        distinct_on: [users_select_column!]
-        "limit the nuber of rows returned"
-        limit: Int
-        "skip the first n rows. Use only with order_by"
-        offset: Int
-        "sort the rows by one or more columns"
-        order_by: [users_order_by!]
-        "filter the rows returned"
-        where: users_bool_exp
-    ): users_aggregate!
-    "fetch data from the table: \"users\" using primary key columns"
-    users_by_pk(id: uuid!): users
-}
-
-type Result {
-    totalCount: Int
-}
-
-type Roadster {
-    apoapsis_au: Float
-    details: String
-    earth_distance_km: Float
-    earth_distance_mi: Float
-    eccentricity: Float
-    epoch_jd: Float
-    inclination: Float
-    launch_date_unix: Date
-    launch_date_utc: Date
-    launch_mass_kg: Int
-    launch_mass_lbs: Int
-    longitude: Float
-    mars_distance_km: Float
-    mars_distance_mi: Float
-    name: String
-    norad_id: Int
-    orbit_type: Float
-    periapsis_arg: Float
-    periapsis_au: Float
-    period_days: Float
-    semi_major_axis_au: Float
-    speed_kph: Float
-    speed_mph: Float
-    wikipedia: String
-}
-
-type Rocket {
-    active: Boolean
-    boosters: Int
-    company: String
-    cost_per_launch: Int
-    country: String
-    description: String
-    diameter: Distance
-    engines: RocketEngines
-    first_flight: Date
-    first_stage: RocketFirstStage
-    height: Distance
-    id: ID
-    landing_legs: RocketLandingLegs
-    mass: Mass
-    name: String
-    payload_weights: [RocketPayloadWeight]
-    second_stage: RocketSecondStage
-    stages: Int
-    success_rate_pct: Int
-    type: String
-    wikipedia: String
-}
-
-type RocketEngines {
-    engine_loss_max: String
-    layout: String
-    number: Int
-    propellant_1: String
-    propellant_2: String
-    thrust_sea_level: Force
-    thrust_to_weight: Float
-    thrust_vacuum: Force
-    type: String
-    version: String
-}
-
-type RocketFirstStage {
-    burn_time_sec: Int
-    engines: Int
-    fuel_amount_tons: Float
-    reusable: Boolean
-    thrust_sea_level: Force
-    thrust_vacuum: Force
-}
-
-type RocketLandingLegs {
-    material: String
-    number: Int
-}
-
-type RocketPayloadWeight {
-    id: String
-    kg: Int
-    lb: Int
-    name: String
-}
-
-type RocketSecondStage {
-    burn_time_sec: Int
-    engines: Int
-    fuel_amount_tons: Float
-    payloads: RocketSecondStagePayloads
-    thrust: Force
-}
-
-type RocketSecondStagePayloadCompositeFairing {
-    diameter: Distance
-    height: Distance
-}
-
-type RocketSecondStagePayloads {
-    composite_fairing: RocketSecondStagePayloadCompositeFairing
-    option_1: String
-}
-
-type RocketsResult {
-    data: [Rocket]
-    result: Result
-}
-
-type Ship {
-    abs: Int
-    active: Boolean
-    attempted_landings: Int
-    class: Int
-    course_deg: Int
-    home_port: String
-    id: ID
-    image: String
-    imo: Int
-    missions: [ShipMission]
-    mmsi: Int
-    model: String
-    name: String
-    position: ShipLocation
-    roles: [String]
-    speed_kn: Float
-    status: String
-    successful_landings: Int
-    type: String
+    price_group: ConnectPriceGroupRelation
+    rating: Float
     url: String
-    weight_kg: Int
-    weight_lbs: Int
-    year_built: Int
 }
 
-type ShipLocation {
-    latitude: Float
-    longitude: Float
+"Dynamic WHERE conditions for the `where` argument on the query `inventories`."
+input BranchInventoriesWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [BranchInventoriesWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: BranchInventoriesWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [BranchInventoriesWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: BranchInventoriesWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
 }
 
-type ShipMission {
-    flight: String
-    name: String
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `inventories`."
+input BranchInventoriesWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: BranchInventoriesWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
 }
 
-type ShipsResult {
-    data: [Ship]
-    result: Result
-}
-
-type Subscription {
-    "fetch data from the table: \"users\""
-    users(
-        "distinct select on columns"
-        distinct_on: [users_select_column!]
-        "limit the nuber of rows returned"
-        limit: Int
-        "skip the first n rows. Use only with order_by"
-        offset: Int
-        "sort the rows by one or more columns"
-        order_by: [users_order_by!]
-        "filter the rows returned"
-        where: users_bool_exp
-    ): [users!]!
-    "fetch aggregated fields from the table: \"users\""
-    users_aggregate(
-        "distinct select on columns"
-        distinct_on: [users_select_column!]
-        "limit the nuber of rows returned"
-        limit: Int
-        "skip the first n rows. Use only with order_by"
-        offset: Int
-        "sort the rows by one or more columns"
-        order_by: [users_order_by!]
-        "filter the rows returned"
-        where: users_bool_exp
-    ): users_aggregate!
-    "fetch data from the table: \"users\" using primary key columns"
-    users_by_pk(id: uuid!): users
-}
-
-type Volume {
-    cubic_feet: Int
-    cubic_meters: Int
-}
-
-"columns and relationships of \"users\""
-type users {
-    id: uuid!
-    name: String
-    rocket: String
-    timestamp: timestamptz!
-    twitter: String
-}
-
-"aggregated selection of \"users\""
-type users_aggregate {
-    aggregate: users_aggregate_fields
-    nodes: [users!]!
-}
-
-"aggregate fields of \"users\""
-type users_aggregate_fields {
-    count(columns: [users_select_column!], distinct: Boolean): Int
-    max: users_max_fields
-    min: users_min_fields
-}
-
-"aggregate max on columns"
-type users_max_fields {
-    name: String
-    rocket: String
-    timestamp: timestamptz
-    twitter: String
-}
-
-"aggregate min on columns"
-type users_min_fields {
-    name: String
-    rocket: String
-    timestamp: timestamptz
-    twitter: String
-}
-
-"response of any mutation on the table \"users\""
-type users_mutation_response {
-    "number of affected rows by the mutation"
-    affected_rows: Int!
-    "data of the affected rows by the mutation"
-    returning: [users!]!
-}
-
-"conflict action"
-enum conflict_action {
-    "ignore the insert on this row"
-    ignore
-    "update the row with the given values"
-    update
-}
-
-"column ordering options"
-enum order_by {
-    "in the ascending order, nulls last"
-    asc
-    "in the ascending order, nulls first"
-    asc_nulls_first
-    "in the ascending order, nulls last"
-    asc_nulls_last
-    "in the descending order, nulls first"
-    desc
-    "in the descending order, nulls first"
-    desc_nulls_first
-    "in the descending order, nulls last"
-    desc_nulls_last
-}
-
-"unique or primary key constraints on table \"users\""
-enum users_constraint {
-    constraint
-    key
-    or
-    primary
-    unique
-    users_pkey
-}
-
-"select columns of table \"users\""
-enum users_select_column {
-    column
-    id
-    name
-    rocket
-    timestamp
-    twitter
-}
-
-"update columns of table \"users\""
-enum users_update_column {
-    column
-    id
-    name
-    rocket
-    timestamp
-    twitter
-}
-
-scalar Date
-
-scalar ObjectID
-
-scalar timestamptz
-
-scalar uuid
-
-input CapsulesFind {
+input CategoryInput {
+    company: ConnectCompanyRelation
+    description: String
     id: ID
-    landings: Int
-    mission: String
-    original_launch: Date
-    reuse_count: Int
-    status: String
+    name: String
+    parent: ConnectParentRelation
+    parent_id: ID
+    products: ConnectProductRelation
+    scope: String
+}
+
+input CharacteristicInput {
+    categories: ConnectCategoryRelation
+    id: ID
+    name: String
+    products: ConnectProductRelation
+    scope: String
+}
+
+input CompanyInput {
+    addresses: ConnectAddressRelation
+    branches: ConnectBranchRelation
+    contact_details: ConnectContactDetailRelation
+    description: String
+    id: ID
+    name: String
+    products: ConnectProductRelation
+    reviews: ConnectReviewRelation
+    suppliers: ConnectCompanyRelation
+    uploads: ConnectUploadRelation
+    url: String
+    users: ConnectUserRelation
+    wallets: ConnectWalletRelation
+    work_hours: JsonObj
+}
+
+input ConnectAccountTitleRelation {
+    connect: ID
+    create: [AccountTitleInput!]
+    delete: [ID]
+    update: [AccountTitleInput!]
+}
+
+input ConnectAddressRelation {
+    connect: ID
+    create: [AddressInput!]
+    delete: [ID]
+    disconnect: Boolean
+    sync: [AddressInput!]
+    update: [AddressInput!]
+    upsert: [AddressInput!]
+}
+
+input ConnectBranchRelation {
+    connect: ID
+    create: [BranchInput!]
+    delete: [ID]
+    disconnect: Boolean
+    sync: [ID]
+    update: [BranchInput!]
+    upsert: [BranchInput!]
+}
+
+input ConnectCategoryRelation {
+    connect: [ID!]
+    create: [CategoryInput!]
+    delete: [ID!]
+    disconnect: [ID!]
+    sync: [ID!]
+    update: [CategoryInput!]
+    upsert: [CategoryInput!]
+}
+
+input ConnectCharacteristicRelation {
+    connect: [ID!]
+    create: [CharacteristicInput!]
+    delete: [ID]
+    disconnect: Boolean
+    sync: [ID!]
+    update: [CharacteristicInput!]
+    upsert: [CharacteristicInput!]
+}
+
+input ConnectCompanyRelation {
+    connect: [ID]
+    create: [CompanyInput!]
+    delete: [ID]
+    disconnect: Boolean
+    sync: [ID]
+    update: [CompanyInput!]
+    upsert: [CompanyInput!]
+}
+
+input ConnectContactDetailRelation {
+    connect: ID
+    create: [ContactDetailInput!]
+    delete: [ID]
+    disconnect: Boolean
+    sync: [ContactDetailInput!]
+    update: [ContactDetailInput!]
+    upsert: [ContactDetailInput!]
+}
+
+input ConnectCourierRelation {
+    connect: ID
+    create: [CourierInput!]
+    delete: [ID]
+    update: [CourierInput!]
+}
+
+input ConnectDepositRelation {
+    create: [DepositInput!]
+    delete: [ID]
+    update: [DepositInput!]
+}
+
+input ConnectDestinationRelation {
+    create: [DestinationInput!]
+    delete: [ID]
+    update: [DestinationInput!]
+}
+
+input ConnectInventoryAdjustmentDetailRelation {
+    connect: ID
+    create: InventoryAdjustmentDetailInput
+    delete: [ID]
+    disconnect: Boolean
+    update: [InventoryAdjustmentDetailInput!]
+}
+
+input ConnectInventoryAdjustmentRelation {
+    connect: ID
+    create: InventoryAdjustmentInput
+    delete: [ID]
+    disconnect: Boolean
+    update: [InventoryAdjustmentInput!]
+    upsert: [InventoryAdjustmentInput!]
+}
+
+input ConnectInventoryAuditDetailRelation {
+    connect: ID
+    create: [InventoryAuditDetailInput!]
+    delete: [ID]
+    disconnect: Boolean
+    update: [InventoryAuditDetailInput!]
+}
+
+input ConnectInventoryAuditIssueRelation {
+    connect: ID
+    create: [InventoryAuditIssueInput]
+    delete: [ID]
+    disconnect: Boolean
+    update: InventoryAuditIssueInput
+}
+
+input ConnectInventoryAuditRelation {
+    connect: ID
+    create: [InventoryAuditInput!]
+    delete: [ID]
+    disconnect: Boolean
+    update: [InventoryAuditInput!]
+}
+
+input ConnectInventoryOrderPointDetailRelation {
+    connect: ID
+    create: [InventoryOrderPointDetailInput!]
+    delete: [ID]
+    update: [InventoryOrderPointDetailInput!]
+    upsert: [InventoryOrderPointDetailInput!]
+}
+
+input ConnectInventoryOrderPointRelation {
+    connect: ID
+    create: InventoryOrderPointInput
+    update: [InventoryOrderPointInput]
+    upsert: InventoryOrderPointInput
+}
+
+input ConnectInventoryRelation {
+    connect: ID
+    create: InventoryInput
+    update: [InventoryInput]
+    upsert: InventoryInput
+}
+
+input ConnectLocationRelation {
+    create: [LocationInput!]
+    update: [LocationInput!]
+}
+
+input ConnectMessageRelation {
+    connect: ID
+    create: [MessageInput]
+    delete: [ID]
+    disconnect: Boolean
+    sync: [ID!]
+    update: [MessageInput!]
+    upsert: [MessageInput!]
+}
+
+input ConnectMessageRoomRelation {
+    connect: ID
+    disconnect: ID
+    sync: [SyncMessageRoomPivot]
+    syncWithoutDetaching: [SyncMessageRoomPivot]
+    upsert: MessageRoomInput
+}
+
+input ConnectMorphToRelation {
+    connect: MorphToInput
+    delete: Boolean
+    disconnect: Boolean
+}
+
+input ConnectNavigationRelation {
+    create: [NavigationInput!]
+    update: [NavigationInput!]
+}
+
+input ConnectNoteRelation {
+    connect: [ID]
+    create: [NoteInput!]
+    delete: Boolean
+    disconnect: Boolean
+    update: [NoteInput!]
+    upsert: [NoteInput!]
+}
+
+input ConnectNoteableInput {
+    id: ID
+    noteable: ConnectMorphToRelation
     type: String
 }
 
-input CoresFind {
-    asds_attempts: Int
-    asds_landings: Int
-    block: Int
-    id: String
-    missions: String
-    original_launch: Date
-    reuse_count: Int
-    rtls_attempts: Int
-    rtls_landings: Int
-    status: String
-    water_landing: Boolean
+input ConnectOrderDetailRelation {
+    connect: ID
+    create: [OrderDetailInput!]
+    delete: [ID]
+    disconnect: Boolean
+    update: [OrderDetailInput!]
+    upsert: [OrderDetailInput!]
 }
 
-input HistoryFind {
-    end: Date
-    flight_number: Int
-    id: ID
-    start: Date
+input ConnectOrderRelation {
+    connect: ID
+    create: [OrderInput!]
+    delete: [ID]
+    disconnect: Boolean
+    update: [OrderInput!]
+    upsert: [OrderInput!]
 }
 
-input LaunchFind {
-    apoapsis_km: Float
-    block: Int
-    cap_serial: String
-    capsule_reuse: String
-    core_flight: Int
-    core_reuse: String
-    core_serial: String
-    customer: String
-    eccentricity: Float
-    end: Date
-    epoch: Date
-    fairings_recovered: String
-    fairings_recovery_attempt: String
-    fairings_reuse: String
-    fairings_reused: String
-    fairings_ship: String
-    gridfins: String
-    id: ID
-    inclination_deg: Float
-    land_success: String
-    landing_intent: String
-    landing_type: String
-    landing_vehicle: String
-    launch_date_local: Date
-    launch_date_utc: Date
-    launch_success: String
-    launch_year: String
-    legs: String
-    lifespan_years: Float
-    longitude: Float
-    manufacturer: String
-    mean_motion: Float
-    mission_id: String
-    mission_name: String
-    nationality: String
-    norad_id: Int
-    orbit: String
-    payload_id: String
-    payload_type: String
-    periapsis_km: Float
-    period_min: Float
-    raan: Float
-    reference_system: String
-    regime: String
-    reused: String
-    rocket_id: String
-    rocket_name: String
-    rocket_type: String
-    second_stage_block: String
-    semi_major_axis_km: Float
-    ship: String
-    side_core1_reuse: String
-    side_core2_reuse: String
-    site_id: String
-    site_name: String
-    site_name_long: String
-    start: Date
-    tbd: String
-    tentative: String
-    tentative_max_precision: String
+input ConnectParentRelation {
+    connect: ID
+    disconnect: Boolean
+    sync: ID
 }
 
-input MissionsFind {
+input ConnectPaymentDetailRelation {
+    create: [PaymentDetailInput!]
+    update: [PaymentDetailInput!]
+}
+
+input ConnectPaymentRelation {
+    connect: ID!
+    create: [PaymentInput!]
+    delete: Boolean
+    disconnect: Boolean
+    update: [PaymentInput!]
+    upsert: [PaymentInput!]
+}
+
+input ConnectPaymentTypeRelation {
+    create: [PaymentTypeInput!]
+    update: [PaymentTypeInput!]
+}
+
+input ConnectPermissionRelation {
+    connect: [ID!]
+    create: [PermissionInput!]
+    delete: Boolean
+    disconnect: ID
     id: ID
-    manufacturer: String
+    sync: [ID]
+    update: [PermissionInput!]
+    upsert: [PermissionInput!]
+}
+
+input ConnectPriceGroupRelation {
+    connect: ID
+    create: [PriceGroupInput!]
+    update: [PriceGroupInput!]
+}
+
+input ConnectPriceRelation {
+    create: [PriceInput!]
+    update: [PriceInput!]
+    upsert: [PriceInput!]
+}
+
+input ConnectProductPackageRelation {
+    connect: [ID!]
+    create: [ProductPackageInput!]
+    delete: [ID]
+    disconnect: Boolean
+    update: [ProductPackageInput!]
+    upsert: [ProductPackageInput!]
+}
+
+input ConnectProductRelation {
+    connect: ID
+    create: ProductInput
+    disconnect: Boolean
+    sync: [ID]
+    update: ProductInput
+    upsert: ProductInput
+}
+
+input ConnectPurchaseDetailRelation {
+    connect: [ID!]
+    create: [PurchaseDetailInput!]
+    delete: Boolean
+    disconnect: Boolean
+    update: [PurchaseDetailInput!]
+    upsert: [PurchaseDetailInput!]
+}
+
+input ConnectPurchaseRelation {
+    connect: [ID!]
+    create: [PurchaseInput!]
+    delete: Boolean
+    disconnect: Boolean
+    update: [PurchaseInput!]
+    upsert: [PurchaseInput!]
+}
+
+input ConnectQuotaRelation {
+    connect: ID
+    create: [QuotaInput!]
+    update: [QuotaInput!]
+}
+
+input ConnectRackRelation {
+    connect: ID
+    create: [RackInput!]
+    delete: Boolean
+    disconnect: Boolean
+    update: [RackInput!]
+    upsert: [RackInput!]
+}
+
+input ConnectReceiptBookRelation {
+    create: [ReceiptBookInput!]
+    update: [ReceiptBookInput!]
+    upsert: [ReceiptBookInput!]
+}
+
+input ConnectReceiptRelation {
+    create: ReceiptInput
+    update: ReceiptInput
+}
+
+input ConnectReceiveDetailRelation {
+    connect: [ID!]
+    create: [ReceiveDetailInput!]
+    delete: Boolean
+    disconnect: Boolean
+    update: [ReceiveDetailInput!]
+    upsert: [ReceiveDetailInput!]
+}
+
+input ConnectReceiveRelation {
+    connect: [ID!]
+    create: [ReceiveInput!]
+    delete: Boolean
+    disconnect: Boolean
+    update: [ReceiveInput!]
+    upsert: [ReceiveInput!]
+}
+
+input ConnectReturnRelation {
+    connect: ID
+    create: [ReturnInput!]
+    delete: Boolean
+    disconnect: Boolean
+    update: [ReturnInput!]
+}
+
+input ConnectReviewRelation {
+    create: ReviewInput!
+    update: ReviewInput!
+}
+
+input ConnectRoleRelation {
+    connect: [ID!]
+    create: [RoleInput!]
+    delete: Boolean
+    disconnect: Boolean
+    sync: [ID]
+    update: [RoleInput!]
+    upsert: [RoleInput!]
+}
+
+input ConnectSaleRelation {
+    create: [SaleInput!]
+    update: [SaleInput!]
+}
+
+input ConnectScheduleRelation {
+    connect: [ID]
+    create: [ScheduleInput!]
+    delete: Boolean
+    disconnect: Boolean
+    update: [ScheduleInput!]
+    upsert: [ScheduleInput!]
+}
+
+input ConnectScheduleableInput {
+    id: ID!
+    scheduleable: ConnectMorphToRelation
+    type: String!
+}
+
+input ConnectTagRelation {
+    create: [TagInput!]
+    update: [TagInput!]
+}
+
+input ConnectTerminalRelation {
+    connect: ID
+    create: [TerminalInput!]
+    delete: Boolean
+    disconnect: Boolean
+    update: [TerminalInput!]
+    upsert: [TerminalInput!]
+}
+
+input ConnectThemeRelation {
+    create: CreateThemeInput
+}
+
+input ConnectTransferInventoryDetailRackRelation {
+    connect: ID
+    create: [TransferInventoryDetailRackInput!]
+    delete: [ID]
+    update: [TransferInventoryDetailRackInput!]
+    upsert: [TransferInventoryDetailRackInput!]
+}
+
+input ConnectTransferInventoryDetailRelation {
+    connect: ID
+    create: [TransferInventoryDetailInput!]
+    delete: [ID]
+    update: [TransferInventoryDetailInput!]
+    upsert: [TransferInventoryDetailInput!]
+}
+
+input ConnectTransferInventoryRelation {
+    connect: ID
+    create: [TransferInventoryInput!]
+    update: [TransferInventoryInput!]
+    upsert: [TransferInventoryInput!]
+}
+
+input ConnectUnitRelation {
+    connect: [ID!]
+    create: [UnitInput!]
+    delete: Boolean
+    disconnect: Boolean
+    update: [UnitInput!]
+    upsert: [UnitInput!]
+}
+
+input ConnectUploadRelation {
+    create: [UploadInput!]
+    update: [UploadInput!]
+}
+
+input ConnectUserRelation {
+    connect: ID
+    create: UserInput
+    disconnect: UserInput
+    update: UserInput
+}
+
+input ConnectUsersRelation {
+    connect: [ID]
+    create: [UserInput]
+    disconnect: [ID]
+    update: UserInput
+    upsert: [UserInput]
+}
+
+input ConnectWalletRelation {
+    connect: [ID]
+    create: [WalletInput!]
+    delete: Boolean
+    disconnect: Boolean
+    update: [WalletInput!]
+    upsert: [WalletInput!]
+}
+
+input ConnectWalletableInput {
+    id: ID!
+    type: String!
+    walletable: ConnectMorphToRelation
+}
+
+input ContactDetailInput {
+    contactable: ConnectMorphToRelation
+    email: String
+    emergency_contact: String
+    emergency_name: String
+    id: ID
+    number: String
+    type: String
+}
+
+input CourierInput {
+    contact_details: ConnectContactDetailRelation
+    description: String
+    id: ID!
+    is_company_owned: Boolean!
+    name: String!
+    orders: ConnectOrderRelation
+}
+
+input CreateThemeInput {
+    color: String
+    company: ConnectCompanyRelation
+}
+
+input DepositInput {
+    amount: Float!
+    depositable: ConnectMorphToRelation
+    id: ID!
+    wallet: ConnectWalletRelation
+}
+
+input DestinationInput {
+    address: ConnectAddressRelation
+    arrived_at: DateTime
+    id: ID
+    navigation: ConnectNavigationRelation
+}
+
+input DomainInput {
+    domain: String
+    id: ID
+    tenant_id: String
+}
+
+input InventoryAdjustmentDetailInput {
+    id: ID
+    inventory_adjustment: ConnectInventoryAdjustmentRelation
+    issue: ConnectInventoryAuditIssueRelation
+    issue_type: Int
+    qty: Float
+    rack: ConnectRackRelation
+    rack_id: Int
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `details`."
+input InventoryAdjustmentDetailsWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [InventoryAdjustmentDetailsWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: InventoryAdjustmentDetailsWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [InventoryAdjustmentDetailsWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: InventoryAdjustmentDetailsWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `details`."
+input InventoryAdjustmentDetailsWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: InventoryAdjustmentDetailsWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+input InventoryAdjustmentInput {
+    details: ConnectInventoryAdjustmentDetailRelation
+    id: ID
+    inventory_audit: ConnectInventoryAuditRelation
+    product: ConnectProductRelation
+    status: Int
+}
+
+input InventoryAuditDetailInput {
+    action: Int
+    from_qty: Float
+    id: ID
+    inventory_audit: ConnectInventoryAuditRelation
+    issues: ConnectInventoryAuditIssueRelation
+    product: ConnectProductRelation
+    remarks: String
+    to_qty: Float
+    witness1: ConnectUserRelation
+    witness2: ConnectUserRelation
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `details`."
+input InventoryAuditDetailsWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [InventoryAuditDetailsWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: InventoryAuditDetailsWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [InventoryAuditDetailsWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: InventoryAuditDetailsWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `details`."
+input InventoryAuditDetailsWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: InventoryAuditDetailsWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+input InventoryAuditInput {
+    id: ID
+    inventory_adjustments: ConnectInventoryAdjustmentRelation
+    issue_status: Int
+    rack: ConnectRackRelation
+    status: Int
+    user: ConnectUserRelation
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `inventory_adjustments`."
+input InventoryAuditInventoryAdjustmentsWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [InventoryAuditInventoryAdjustmentsWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: InventoryAuditInventoryAdjustmentsWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [InventoryAuditInventoryAdjustmentsWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: InventoryAuditInventoryAdjustmentsWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `inventory_adjustments`."
+input InventoryAuditInventoryAdjustmentsWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: InventoryAuditInventoryAdjustmentsWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+input InventoryAuditIssueInput {
+    adjustment_detail: ConnectInventoryAdjustmentDetailRelation
+    id: ID
+    issue_type: Int
+    qty: Float
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `issues`."
+input InventoryAuditIssuesWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [InventoryAuditIssuesWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: InventoryAuditIssuesWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [InventoryAuditIssuesWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: InventoryAuditIssuesWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `issues`."
+input InventoryAuditIssuesWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: InventoryAuditIssuesWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+input InventoryInput {
+    id: ID
+    issue_type: Int
+    product: ConnectProductRelation
+    qty: Float
+    rack: ConnectRackRelation
+}
+
+input InventoryOrderPointDetailInput {
+    id: ID
+    month: Int
+    months: [Int]
+    order_qty: Float
+    reorder_point: Float
+}
+
+input InventoryOrderPointInput {
+    branches: [ID]
+    id: ID
+    inventory_order_point_details: ConnectInventoryOrderPointDetailRelation!
+    order_to: ID
+    products: [ID]
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `product`."
+input InventoryProductWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [InventoryProductWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: InventoryProductWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [InventoryProductWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: InventoryProductWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `product`."
+input InventoryProductWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: InventoryProductWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+input InventoryStockValueInput {
+    branches: [Int!]
+    effective_at: Date
+    items: [Int!]
+}
+
+input InventoryStockValueOrderBy {
+    column: InventoryStockValueColumns
+    direction: OrderBy
+}
+
+input LabelInput {
+    alias: String
+    id: ID
     name: String
-    payload_id: String
 }
 
-input PayloadsFind {
-    apoapsis_km: Float
-    customer: String
-    eccentricity: Float
-    epoch: Date
-    inclination_deg: Float
-    lifespan_years: Float
-    longitude: Float
-    manufacturer: String
-    mean_motion: Float
-    nationality: String
-    norad_id: Int
-    orbit: String
-    payload_id: ID
-    payload_type: String
-    periapsis_km: Float
-    period_min: Float
-    raan: Float
-    reference_system: String
-    regime: String
-    reused: Boolean
-    semi_major_axis_km: Float
-}
-
-input ShipsFind {
-    abs: Int
-    active: Boolean
-    attempted_landings: Int
-    class: Int
-    course_deg: Int
-    home_port: String
+input LocationInput {
     id: ID
-    imo: Int
     latitude: Float
     longitude: Float
-    mission: String
-    mmsi: Int
+    navigation: ConnectNavigationRelation
+}
+
+input MessageInput {
+    content: String
+    id: ID
+    message_room: ConnectMessageRoomRelation
+    user: ConnectUserRelation
+}
+
+input MessageRoomInput {
+    id: ID
+    messages: ConnectMessageRelation
+    name: String
+    on_call: Int
+    peer: String
+    type: String
+    updated_at: String
+    users: ConnectUsersRelation
+}
+
+input MessageRoomUpsertedInput {
+    userId: ID
+}
+
+input MessageUpsertedInput {
+    userId: ID
+}
+
+input MorphToInput {
+    id: ID!
+    type: String!
+}
+
+input NavigationInput {
+    completed_at: DateTime
+    description: String
+    destinations: ConnectDestinationRelation
+    id: ID!
+    locations: ConnectLocationRelation
+    started_at: DateTime
+    user: ConnectUserRelation
+}
+
+input NoteInput {
+    details: String
+    id: ID
+    noteable: ConnectNoteableInput
+}
+
+"Allows ordering a list of records."
+input OrderByClause {
+    "The column that is used for ordering."
+    column: String!
+    "The direction that is used for ordering."
+    order: SortOrder!
+}
+
+input OrderDetailInput {
+    hide_discount: Boolean
+    id: ID
+    order: ConnectOrderRelation
+    original_qty: Float
+    preferred_unit: String
+    price: ConnectPriceRelation
+    price_adjustment: Float
+    product: ConnectProductRelation
+    qty: Float
+    unit_qty: Float
+}
+
+input OrderInput {
+    branch: ConnectBranchRelation
+    categories: ConnectCategoryRelation
+    client_reference: String
+    courier: ConnectCourierRelation
+    customer: ConnectUserRelation
+    description: String
+    from_status: Int
+    id: ID
+    is_priority: Boolean
+    notes: ConnectNoteRelation
+    order_details: ConnectOrderDetailRelation
+    receipts: ConnectReceiptRelation
+    sale: ConnectSaleRelation
+    status: Int
+    to_branch: ConnectBranchRelation
+    total: Float
+    type: Int
+    user: ConnectUserRelation
+}
+
+input OrderSalesInput {
+    dateEnd: Date
+    dateStart: Date
+    status: [Int!]
+}
+
+input OrderSalesOrderBy {
+    column: OrderSalesColumns
+    direction: OrderBy
+}
+
+input OrdersTotalInput {
+    groupBy: [String!]
+    months: [Int!]
+    take: Int
+    years: [Int!]
+}
+
+input PaymentDetailInput {
+    amount: Float
+    deposits: ConnectDepositRelation
+    id: ID
+    payment: ConnectPaymentRelation
+    payment_type: ConnectPaymentTypeRelation
+}
+
+input PaymentInput {
+    id: ID!
+    payment_details: ConnectPaymentDetailRelation
+    sale: ConnectSaleRelation
+    total: Float
+}
+
+input PaymentTypeInput {
+    description: String
+    id: ID
+    name: String
+    payment_detail: ConnectPaymentDetailRelation
+    payments: ConnectPaymentRelation
+}
+
+input PermissionInput {
+    categories: ConnectCategoryRelation
+    deleted_at: DateTime
+    description: String
+    field: String
+    guard_name: String = "api"
+    id: ID
     model: String
     name: String
-    role: String
-    speed_kn: Int
-    status: String
-    successful_landings: Int
+    roles: ConnectRoleRelation
+    users: ConnectUserRelation
+}
+
+input PriceGroupInput {
+    id: ID
+    name: String
+    prices: ConnectPriceRelation
+}
+
+input PriceInput {
+    amount: Float
+    effective_at: DateTime
+    id: ID
+    price_group: ConnectPriceGroupRelation
+    product: ConnectProductRelation
+    user: ConnectUserRelation
+}
+
+input PrintLayoutInput {
+    border: Boolean
+    company_id: ID
+    data: JsonObj
+    date: Boolean
+    description: Boolean
+    id: ID
+    layout_name: String
+}
+
+input ProductInput {
+    barcode: String
+    categories: ConnectCategoryRelation
+    characteristics: ConnectCharacteristicRelation
+    company: ConnectCompanyRelation
+    components: ConnectProductPackageRelation
+    description: String
+    for_assembly: Int
+    for_freebies: Int
+    has_serial: Int
+    id: ID
+    initial_product_cost: Float
+    inventories: ConnectInventoryRelation
+    inventory_adjustment: ConnectInventoryAdjustmentRelation
+    item_code: String
+    item_type: Int
+    package_type: Int
+    prices: ConnectPriceRelation
+    reviews: ConnectReviewRelation
+    units: ConnectUnitRelation
+    uploads: ConnectUploadRelation
+    warranty: Int
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `inventories`."
+input ProductInventoriesWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [ProductInventoriesWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: ProductInventoriesWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [ProductInventoriesWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: ProductInventoriesWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `inventories`."
+input ProductInventoriesWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: ProductInventoriesWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `inventory_audit_details`."
+input ProductInventoryAuditDetailsWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [ProductInventoryAuditDetailsWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: ProductInventoryAuditDetailsWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [ProductInventoryAuditDetailsWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: ProductInventoryAuditDetailsWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `inventory_audit_details`."
+input ProductInventoryAuditDetailsWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: ProductInventoryAuditDetailsWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `inventory_order_point`."
+input ProductInventoryOrderPointWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [ProductInventoryOrderPointWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: ProductInventoryOrderPointWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [ProductInventoryOrderPointWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: ProductInventoryOrderPointWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `inventory_order_point`."
+input ProductInventoryOrderPointWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: ProductInventoryOrderPointWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+input ProductPackageInput {
+    component: ConnectProductRelation
+    id: ID
+    product: ConnectProductRelation
+    qty: Int!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `prices`."
+input ProductPricesWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [ProductPricesWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: ProductPricesWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [ProductPricesWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: ProductPricesWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `prices`."
+input ProductPricesWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: ProductPricesWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+input PurchaseDetailInput {
+    id: ID
+    price: ConnectPriceRelation
+    price_adjustment: Float
+    product: ConnectProductRelation
+    purchase: ConnectPurchaseRelation
+    qty: Float
+}
+
+input PurchaseInput {
+    branch: ConnectBranchRelation
+    company: ConnectCompanyRelation
+    id: ID
+    receivables: ConnectReceiveRelation
+    supplier: ConnectCompanyRelation
+    supplier_branch: ConnectBranchRelation
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `accountTitlesPaginate`."
+input QueryAccountTitlesPaginateWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryAccountTitlesPaginateWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryAccountTitlesPaginateWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryAccountTitlesPaginateWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryAccountTitlesPaginateWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `accountTitlesPaginate`."
+input QueryAccountTitlesPaginateWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryAccountTitlesPaginateWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `addressesPaginate`."
+input QueryAddressesPaginateWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryAddressesPaginateWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryAddressesPaginateWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryAddressesPaginateWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryAddressesPaginateWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `addressesPaginate`."
+input QueryAddressesPaginateWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryAddressesPaginateWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `branchesPaginate`."
+input QueryBranchesPaginateWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryBranchesPaginateWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryBranchesPaginateWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryBranchesPaginateWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryBranchesPaginateWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `branchesPaginate`."
+input QueryBranchesPaginateWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryBranchesPaginateWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `hasCharacteristics` argument on the query `categories`."
+input QueryCategoriesHasCharacteristicsWhereHasConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryCategoriesHasCharacteristicsWhereHasConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryCategoriesHasCharacteristicsWhereHasConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryCategoriesHasCharacteristicsWhereHasConditions!]
+    "The column that is used for the condition."
+    column: QueryCategoriesHasCharacteristicsColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `hasCharacteristics` argument on the query `categories`."
+input QueryCategoriesHasCharacteristicsWhereHasConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryCategoriesHasCharacteristicsWhereHasConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `hasCharacteristics` argument on the query `categoriesPaginate`."
+input QueryCategoriesPaginateHasCharacteristicsWhereHasConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryCategoriesPaginateHasCharacteristicsWhereHasConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryCategoriesPaginateHasCharacteristicsWhereHasConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryCategoriesPaginateHasCharacteristicsWhereHasConditions!]
+    "The column that is used for the condition."
+    column: QueryCategoriesPaginateHasCharacteristicsColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `hasCharacteristics` argument on the query `categoriesPaginate`."
+input QueryCategoriesPaginateHasCharacteristicsWhereHasConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryCategoriesPaginateHasCharacteristicsWhereHasConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Order by clause for Query.categoriesPaginate.orderBy."
+input QueryCategoriesPaginateOrderByOrderByClause {
+    "The column that is used for ordering."
+    column: QueryCategoriesPaginateOrderByColumn!
+    "The direction that is used for ordering."
+    order: SortOrder!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `categoriesPaginate`."
+input QueryCategoriesPaginateWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryCategoriesPaginateWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryCategoriesPaginateWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryCategoriesPaginateWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryCategoriesPaginateWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `categoriesPaginate`."
+input QueryCategoriesPaginateWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryCategoriesPaginateWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `categories`."
+input QueryCategoriesWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryCategoriesWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryCategoriesWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryCategoriesWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryCategoriesWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `categories`."
+input QueryCategoriesWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryCategoriesWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Order by clause for Query.characteristicsPaginate.orderBy."
+input QueryCharacteristicsPaginateOrderByOrderByClause {
+    "The column that is used for ordering."
+    column: QueryCharacteristicsPaginateOrderByColumn!
+    "The direction that is used for ordering."
+    order: SortOrder!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `characteristicsPaginate`."
+input QueryCharacteristicsPaginateWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryCharacteristicsPaginateWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryCharacteristicsPaginateWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryCharacteristicsPaginateWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryCharacteristicsPaginateWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `characteristicsPaginate`."
+input QueryCharacteristicsPaginateWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryCharacteristicsPaginateWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `companiesPaginate`."
+input QueryCompaniesPaginateWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryCompaniesPaginateWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryCompaniesPaginateWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryCompaniesPaginateWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryCompaniesPaginateWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `companiesPaginate`."
+input QueryCompaniesPaginateWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryCompaniesPaginateWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `inventories`."
+input QueryInventoriesWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryInventoriesWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryInventoriesWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryInventoriesWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryInventoriesWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `inventories`."
+input QueryInventoriesWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryInventoriesWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `inventoryAdjustments`."
+input QueryInventoryAdjustmentsWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryInventoryAdjustmentsWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryInventoryAdjustmentsWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryInventoryAdjustmentsWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryInventoryAdjustmentsWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `inventoryAdjustments`."
+input QueryInventoryAdjustmentsWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryInventoryAdjustmentsWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `inventoryAuditDetailsPaginate`."
+input QueryInventoryAuditDetailsPaginateWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryInventoryAuditDetailsPaginateWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryInventoryAuditDetailsPaginateWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryInventoryAuditDetailsPaginateWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryInventoryAuditDetailsPaginateWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `inventoryAuditDetailsPaginate`."
+input QueryInventoryAuditDetailsPaginateWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryInventoryAuditDetailsPaginateWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `inventoryAuditsPaginate`."
+input QueryInventoryAuditsPaginateWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryInventoryAuditsPaginateWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryInventoryAuditsPaginateWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryInventoryAuditsPaginateWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryInventoryAuditsPaginateWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `inventoryAuditsPaginate`."
+input QueryInventoryAuditsPaginateWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryInventoryAuditsPaginateWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `inventoryOrderPointsPaginate`."
+input QueryInventoryOrderPointsPaginateWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryInventoryOrderPointsPaginateWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryInventoryOrderPointsPaginateWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryInventoryOrderPointsPaginateWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryInventoryOrderPointsPaginateWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `inventoryOrderPointsPaginate`."
+input QueryInventoryOrderPointsPaginateWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryInventoryOrderPointsPaginateWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `labelsPaginate`."
+input QueryLabelsPaginateWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryLabelsPaginateWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryLabelsPaginateWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryLabelsPaginateWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryLabelsPaginateWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `labelsPaginate`."
+input QueryLabelsPaginateWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryLabelsPaginateWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `messageRoom`."
+input QueryMessageRoomWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryMessageRoomWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryMessageRoomWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryMessageRoomWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryMessageRoomWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `messageRoom`."
+input QueryMessageRoomWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryMessageRoomWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `messagesPaginate`."
+input QueryMessagesPaginateWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryMessagesPaginateWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryMessagesPaginateWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryMessagesPaginateWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryMessagesPaginateWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `messagesPaginate`."
+input QueryMessagesPaginateWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryMessagesPaginateWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Order by clause for Query.orders.orderBy."
+input QueryOrdersOrderByOrderByClause {
+    "The column that is used for ordering."
+    column: QueryOrdersOrderByColumn!
+    "The direction that is used for ordering."
+    order: SortOrder!
+}
+
+"Order by clause for Query.ordersPaginate.orderBy."
+input QueryOrdersPaginateOrderByOrderByClause {
+    "The column that is used for ordering."
+    column: QueryOrdersPaginateOrderByColumn!
+    "The direction that is used for ordering."
+    order: SortOrder!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `ordersPaginate`."
+input QueryOrdersPaginateWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryOrdersPaginateWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryOrdersPaginateWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryOrdersPaginateWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryOrdersPaginateWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `ordersPaginate`."
+input QueryOrdersPaginateWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryOrdersPaginateWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `permissionsPaginate`."
+input QueryPermissionsPaginateWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryPermissionsPaginateWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryPermissionsPaginateWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryPermissionsPaginateWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryPermissionsPaginateWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `permissionsPaginate`."
+input QueryPermissionsPaginateWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryPermissionsPaginateWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `permissions`."
+input QueryPermissionsWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryPermissionsWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryPermissionsWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryPermissionsWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryPermissionsWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `permissions`."
+input QueryPermissionsWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryPermissionsWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Order by clause for Query.priceGroupsPaginate.orderBy."
+input QueryPriceGroupsPaginateOrderByOrderByClause {
+    "The column that is used for ordering."
+    column: QueryPriceGroupsPaginateOrderByColumn!
+    "The direction that is used for ordering."
+    order: SortOrder!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `priceGroupsPaginate`."
+input QueryPriceGroupsPaginateWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryPriceGroupsPaginateWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryPriceGroupsPaginateWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryPriceGroupsPaginateWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryPriceGroupsPaginateWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `priceGroupsPaginate`."
+input QueryPriceGroupsPaginateWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryPriceGroupsPaginateWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Order by clause for Query.productsPaginate.orderBy."
+input QueryProductsPaginateOrderByOrderByClause {
+    "The column that is used for ordering."
+    column: QueryProductsPaginateOrderByColumn!
+    "The direction that is used for ordering."
+    order: SortOrder!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `productsPaginate`."
+input QueryProductsPaginateWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryProductsPaginateWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryProductsPaginateWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryProductsPaginateWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryProductsPaginateWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `productsPaginate`."
+input QueryProductsPaginateWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryProductsPaginateWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `products`."
+input QueryProductsWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryProductsWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryProductsWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryProductsWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryProductsWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `products`."
+input QueryProductsWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryProductsWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Order by clause for Query.racksPaginate.orderBy."
+input QueryRacksPaginateOrderByOrderByClause {
+    "The column that is used for ordering."
+    column: QueryRacksPaginateOrderByColumn!
+    "The direction that is used for ordering."
+    order: SortOrder!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `racksPaginate`."
+input QueryRacksPaginateWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryRacksPaginateWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryRacksPaginateWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryRacksPaginateWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryRacksPaginateWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `racksPaginate`."
+input QueryRacksPaginateWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryRacksPaginateWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `racks`."
+input QueryRacksWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryRacksWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryRacksWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryRacksWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryRacksWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `racks`."
+input QueryRacksWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryRacksWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `receiptBooksPaginate`."
+input QueryReceiptBooksPaginateWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryReceiptBooksPaginateWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryReceiptBooksPaginateWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryReceiptBooksPaginateWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryReceiptBooksPaginateWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `receiptBooksPaginate`."
+input QueryReceiptBooksPaginateWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryReceiptBooksPaginateWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `receiptsPaginate`."
+input QueryReceiptsPaginateWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryReceiptsPaginateWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryReceiptsPaginateWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryReceiptsPaginateWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryReceiptsPaginateWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `receiptsPaginate`."
+input QueryReceiptsPaginateWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryReceiptsPaginateWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `rolesPaginate`."
+input QueryRolesPaginateWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryRolesPaginateWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryRolesPaginateWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryRolesPaginateWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryRolesPaginateWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `rolesPaginate`."
+input QueryRolesPaginateWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryRolesPaginateWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `searchCategory`."
+input QuerySearchCategoryWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QuerySearchCategoryWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QuerySearchCategoryWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QuerySearchCategoryWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QuerySearchCategoryWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `searchCategory`."
+input QuerySearchCategoryWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QuerySearchCategoryWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `tagsPaginate`."
+input QueryTagsPaginateWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryTagsPaginateWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryTagsPaginateWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryTagsPaginateWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryTagsPaginateWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `tagsPaginate`."
+input QueryTagsPaginateWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryTagsPaginateWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `terminalsPaginate`."
+input QueryTerminalsPaginateWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryTerminalsPaginateWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryTerminalsPaginateWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryTerminalsPaginateWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryTerminalsPaginateWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `terminalsPaginate`."
+input QueryTerminalsPaginateWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryTerminalsPaginateWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `transferInventoriesPaginate`."
+input QueryTransferInventoriesPaginateWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryTransferInventoriesPaginateWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryTransferInventoriesPaginateWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryTransferInventoriesPaginateWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryTransferInventoriesPaginateWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `transferInventoriesPaginate`."
+input QueryTransferInventoriesPaginateWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryTransferInventoriesPaginateWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Order by clause for Query.unitsPaginate.orderBy."
+input QueryUnitsPaginateOrderByOrderByClause {
+    "The column that is used for ordering."
+    column: QueryUnitsPaginateOrderByColumn!
+    "The direction that is used for ordering."
+    order: SortOrder!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `unitsPaginate`."
+input QueryUnitsPaginateWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryUnitsPaginateWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryUnitsPaginateWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryUnitsPaginateWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryUnitsPaginateWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `unitsPaginate`."
+input QueryUnitsPaginateWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryUnitsPaginateWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `uploads`."
+input QueryUploadsWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryUploadsWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryUploadsWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryUploadsWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryUploadsWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `uploads`."
+input QueryUploadsWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryUploadsWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `usersPaginate`."
+input QueryUsersPaginateWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryUsersPaginateWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryUsersPaginateWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryUsersPaginateWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryUsersPaginateWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `usersPaginate`."
+input QueryUsersPaginateWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryUsersPaginateWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `usersRelay`."
+input QueryUsersRelayWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryUsersRelayWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryUsersRelayWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryUsersRelayWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryUsersRelayWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `usersRelay`."
+input QueryUsersRelayWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryUsersRelayWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `users`."
+input QueryUsersWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [QueryUsersWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: QueryUsersWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [QueryUsersWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: QueryUsersWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `users`."
+input QueryUsersWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: QueryUsersWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+input QuotaInput {
+    amount: Int
+    frequency: String
+    id: ID!
+    name: String
+    quotaable: ConnectMorphToRelation
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `branch`."
+input RackBranchWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [RackBranchWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: RackBranchWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [RackBranchWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: RackBranchWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `branch`."
+input RackBranchWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: RackBranchWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+input RackInput {
+    branch: ConnectBranchRelation
+    categories: ConnectCategoryRelation
+    description: String
+    id: ID
+    inventories: ConnectInventoryRelation
+    is_default: Int
+    name: String
+    users: ConnectUserRelation
+}
+
+input ReceiptBookInput {
+    active: Boolean
+    current: Int
+    description: String
+    end: Int
+    id: ID
+    limit: Int
+    receipt_bookable: ConnectMorphToRelation
+    receipts: ConnectReceiptRelation
+    start: Int
     type: String
-    weight_kg: Int
-    weight_lbs: Int
-    year_built: Int
 }
 
-"expression to compare columns of type String. All fields are combined with logical 'AND'."
-input String_comparison_exp {
-    _eq: String
-    _gt: String
-    _gte: String
-    _ilike: String
-    _in: [String!]
-    _is_null: Boolean
-    _like: String
-    _lt: String
-    _lte: String
-    _neq: String
-    _nilike: String
-    _nin: [String!]
-    _nlike: String
-    _nsimilar: String
-    _similar: String
+input ReceiptInput {
+    id: ID
+    number: Int
+    receipt_book: ConnectReceiptBookRelation
+    receiptable: ConnectMorphToRelation
 }
 
-"expression to compare columns of type timestamptz. All fields are combined with logical 'AND'."
-input timestamptz_comparison_exp {
-    _eq: timestamptz
-    _gt: timestamptz
-    _gte: timestamptz
-    _in: [timestamptz!]
-    _is_null: Boolean
-    _lt: timestamptz
-    _lte: timestamptz
-    _neq: timestamptz
-    _nin: [timestamptz!]
+input ReceiveDetailInput {
+    id: ID
+    price: ConnectPriceRelation
+    price_adjustment: Float
+    product: ConnectProductRelation
+    purchase: ConnectPurchaseRelation
+    qty: Float
 }
 
-"order by aggregate values of table \"users\""
-input users_aggregate_order_by {
-    count: order_by
-    max: users_max_order_by
-    min: users_min_order_by
+input ReceiveInput {
+    branch: ConnectBranchRelation
+    id: ID
+    status: Int
+    user: ConnectUserRelation
 }
 
-"input type for inserting array relation for remote table \"users\""
-input users_arr_rel_insert_input {
-    data: [users_insert_input!]!
-    on_conflict: users_on_conflict
+input ReturnInput {
+    id: ID
+    issue_type: Int
+    order_detail: ConnectOrderDetailRelation
+    qty: Float
+    return_type: Int
 }
 
-"Boolean expression to filter rows from the table \"users\". All fields are combined with a logical 'AND'."
-input users_bool_exp {
-    _and: [users_bool_exp]
-    _not: users_bool_exp
-    _or: [users_bool_exp]
-    id: uuid_comparison_exp
-    name: String_comparison_exp
-    rocket: String_comparison_exp
-    timestamp: timestamptz_comparison_exp
-    twitter: String_comparison_exp
+input ReviewInput {
+    comment: String
+    id: ID
+    product: ConnectProductRelation
+    title: String
+    user: ConnectUserRelation
 }
 
-"input type for inserting data into table \"users\""
-input users_insert_input {
-    id: uuid
+input RoleInput {
+    description: String
+    guard_name: String = "api"
+    id: ID
     name: String
-    rocket: String
-    timestamp: timestamptz
-    twitter: String
+    permissions: ConnectPermissionRelation
+    users: ConnectUserRelation
 }
 
-"order by max() on columns of table \"users\""
-input users_max_order_by {
-    name: order_by
-    rocket: order_by
-    timestamp: order_by
-    twitter: order_by
+input SaleInput {
+    amount_paid: Float
+    categories: ConnectCategoryRelation
+    couriers: ConnectCourierRelation
+    id: ID
+    order_details: ConnectOrderDetailRelation
+    orders: ConnectOrderRelation
+    payments: ConnectPaymentRelation
+    total: Float
 }
 
-"order by min() on columns of table \"users\""
-input users_min_order_by {
-    name: order_by
-    rocket: order_by
-    timestamp: order_by
-    twitter: order_by
+input ScheduleInput {
+    agenda: String
+    id: ID
+    notes: ConnectNoteRelation
+    schedule: DateTime
+    scheduleable: ConnectScheduleableInput
 }
 
-"input type for inserting object relation for remote table \"users\""
-input users_obj_rel_insert_input {
-    data: users_insert_input!
-    on_conflict: users_on_conflict
+input SyncMessageRoomPivot {
+    id: ID!
+    last_seen_message: Int
+    marked_as_read: Boolean
 }
 
-"on conflict condition type for table \"users\""
-input users_on_conflict {
-    constraint: users_constraint!
-    update_columns: [users_update_column!]!
-}
-
-"ordering options when selecting data from \"users\""
-input users_order_by {
-    id: order_by
-    name: order_by
-    rocket: order_by
-    timestamp: order_by
-    twitter: order_by
-}
-
-"input type for updating data in table \"users\""
-input users_set_input {
-    id: uuid
+input TagInput {
+    branches: ConnectBranchRelation
+    id: ID
     name: String
-    rocket: String
-    timestamp: timestamptz
-    twitter: String
+    products: ConnectProductRelation
+    scope: String
 }
 
-"expression to compare columns of type uuid. All fields are combined with logical 'AND'."
-input uuid_comparison_exp {
-    _eq: uuid
-    _gt: uuid
-    _gte: uuid
-    _in: [uuid!]
-    _is_null: Boolean
-    _lt: uuid
-    _lte: uuid
-    _neq: uuid
-    _nin: [uuid!]
+input TenantInput {
+    id: String
+    plan: String
+}
+
+input TerminalInput {
+    branch: ConnectBranchRelation
+    id: ID
+    is_assigned: Int
+    name: String
+    receipt_books: ConnectReceiptBookRelation
+}
+
+input TransferInventoryDetailInput {
+    from_racks: ConnectTransferInventoryDetailRackRelation
+    id: ID
+    product: ConnectProductRelation
+    qty: Float
+    to_racks: ConnectTransferInventoryDetailRackRelation
+    transfer_inventory: ConnectTransferInventoryRelation
+}
+
+input TransferInventoryDetailRackInput {
+    id: ID
+    qty: Float
+    rack_from: ConnectRackRelation
+    rack_to: ConnectRackRelation
+    transfer_inventory_detail: ConnectTransferInventoryDetailRelation
+}
+
+input TransferInventoryInput {
+    branch_from: ConnectBranchRelation
+    branch_to: ConnectBranchRelation
+    courier: ConnectCourierRelation
+    from_status: Int
+    id: ID
+    schedules: ConnectScheduleRelation
+    status: Int
+    transfer_inventory_details: ConnectTransferInventoryDetailRelation
+    type: Int
+    user: ConnectUserRelation
+}
+
+input TransferRackInput {
+    id: ID
+    product: ID
+    qty: Float
+    rack: ID
+    type: Mixed
+}
+
+input UnitInput {
+    company: ConnectCompanyRelation
+    description: String
+    id: ID
+    is_decimal: Int
+    name: String
+    products: ConnectProductRelation
+    scope: String
+}
+
+input UploadInput {
+    default: Int
+    filename: String
+    id: ID
+    name: String
+    tag: String
+    uploadable: ConnectMorphToRelation
+    url: String
+    user: ConnectUserRelation
+}
+
+input UserInput {
+    addresses: ConnectAddressRelation
+    age: Int
+    avatar: String
+    birthday: DateTime
+    branches: ConnectBranchRelation
+    companies: ConnectCompanyRelation
+    company_id: ID
+    contact_details: ConnectContactDetailRelation
+    email: String
+    first_name: String
+    gender: String
+    id: ID
+    is_courier: Int
+    is_customer: Boolean
+    is_seller: Boolean
+    last_name: String
+    message_rooms: ConnectMessageRoomRelation
+    middle_name: String
+    nickname: String
+    password: String
+    permissions: ConnectPermissionRelation
+    points: Float
+    price_group: ConnectPriceGroupRelation
+    racks: ConnectRackRelation
+    referrers: ConnectUsersRelation
+    reviews: ConnectReviewRelation
+    roles: ConnectRoleRelation
+    uploads: ConnectUploadRelation
+    username: String
+    wallets: ConnectWalletRelation
+}
+
+"Dynamic WHERE conditions for the `where` argument on the query `message_rooms`."
+input UserMessageRoomsWhereWhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [UserMessageRoomsWhereWhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: UserMessageRoomsWhereWhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [UserMessageRoomsWhereWhereConditions!]
+    "The column that is used for the condition."
+    column: UserMessageRoomsWhereColumn
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE conditions for the `where` argument on the query `message_rooms`."
+input UserMessageRoomsWhereWhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: UserMessageRoomsWhereWhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
+}
+
+input WalletInput {
+    balance: Float
+    deposit: ConnectDepositRelation
+    details: String
+    id: ID
+    name: String
+    payment_details: ConnectPaymentDetailRelation
+    payment_type: ConnectPaymentTypeRelation
+    payments: ConnectPaymentRelation
+    walletable: ConnectWalletableInput
+}
+
+"Dynamic WHERE conditions for queries."
+input WhereConditions {
+    "A set of conditions that requires all conditions to match."
+    AND: [WhereConditions!]
+    "Check whether a relation exists. Extra conditions or a minimum amount can be applied."
+    HAS: WhereConditionsRelation
+    "A set of conditions that requires at least one condition to match."
+    OR: [WhereConditions!]
+    "The column that is used for the condition."
+    column: String
+    "The operator that is used for the condition."
+    operator: SQLOperator = EQ
+    "The value that is used for the condition."
+    value: Mixed
+}
+
+"Dynamic HAS conditions for WHERE condition queries."
+input WhereConditionsRelation {
+    "The amount to test."
+    amount: Int = 1
+    "Additional condition logic."
+    condition: WhereConditions
+    "The comparison operator to test against the amount."
+    operator: SQLOperator = GTE
+    "The relation that is checked."
+    relation: String!
 }

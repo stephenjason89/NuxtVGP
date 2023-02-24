@@ -34,8 +34,7 @@ export const useAuth = defineStore('auth', {
                     refreshTokenExpiration,
                     isRefreshing: false,
                 })
-                if (useNuxtApp().$router.currentRoute.name === 'login')
-                    useNuxtApp().$router.push('/dashboard')
+                if (useRouter().currentRoute.value.name === 'login') useRouter().push('/dashboard')
             } else {
                 console.error('Login error:', error, message)
                 this.logout()

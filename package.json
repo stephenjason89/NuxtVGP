@@ -24,6 +24,8 @@
     },
     "devDependencies": {
         "@nuxtjs/eslint-config-typescript": "^12.0.0",
+        "@types/lodash.clonedeep": "^4.5.7",
+        "@vue-macros/nuxt": "^1.2.1",
         "cz-conventional-changelog": "^3.3.0",
         "eslint": "^8.32.0",
         "eslint-config-prettier": "^8.6.0",
@@ -46,15 +48,22 @@
         "@pinia/nuxt": "^0.4.6",
         "@vue/apollo-composable": "^4.0.0-beta.2",
         "@vue/apollo-option": "^4.0.0-beta.2",
+        "apexcharts": "^3.37.1",
         "cookie-universal": "^2.2.2",
         "graphql": "^16.5.0",
         "graphql-tag": "^2.11.0",
+        "gridstack": "^7.2.3",
+        "hex-to-css-filter": "^5.4.0",
         "izitoast": "^1.4.0",
         "localforage": "^1.10.0",
-        "pinia-plugin-persistedstate": "^3.0.2",
+        "lodash.clonedeep": "^4.5.0",
+        "overlayscrollbars": "^2.1.0",
+        "pinia-plugin-persistedstate": "^3.1.0",
         "pusher-js": "5.1.1",
         "sass": "^1.57.1",
+        "vue-apexcharts": "^1.6.2",
         "vue-apollo": "^3.1.0",
-        "vuetify": "^3.1.5"
+        "vue-lazy-hydration": "2.0.0-beta.4",
+        "vuetify": "^3.1.6"
     }
 }

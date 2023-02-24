@@ -1,0 +1,222 @@
+@import './fonts.css';
+@import './type-scale.css';
+
+/* width */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 2px #ccc;
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    box-shadow: inset 0 0 0 1px #ccc;
+    background: rgb(0 0 0 / 30%);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(0 0 0 / 50%);
+}
+
+.page-enter-active,
+.page-leave-active {
+    transition: opacity 0.5s;
+}
+
+.page-enter,
+.page-leave-to {
+    opacity: 0;
+}
+
+html {
+    overflow: auto !important;
+}
+
+.slide-up {
+    animation: slide-up 1s;
+}
+
+.header {
+    color: white;
+    font-weight: bold;
+    border: 10px #2d3748;
+    background: #919191;
+    padding: 10px 20px;
+    border-radius: 0 70px 70px 0;
+    margin-bottom: 15px;
+    width: max-content;
+    text-align: center;
+}
+
+@keyframes slide-up {
+    0%,
+    30% {
+        transform: translate3d(0, 30px, 0);
+        opacity: 0;
+        animation-timing-function: ease-in-out;
+    }
+
+    100% {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+        animation-timing-function: ease-in-out;
+    }
+}
+
+/*********** themes **************/
+
+.body-theme-day {
+    background-color: #fff9c4;
+}
+
+.body-theme-night {
+    background-color: #424242;
+}
+
+.body-theme-spring {
+    background-color: #dcedc8;
+}
+
+.body-theme-summer {
+    background-color: #ffcc80;
+}
+
+.body-theme-autumn {
+    background-color: #ffab91;
+}
+
+.body-theme-winter {
+    background-color: #546e7a;
+}
+
+/*********** themes **************/
+
+.sk-cube-grid {
+    width: 80px;
+    height: 80px;
+    top: 30%;
+    left: 45%;
+    position: absolute;
+}
+
+.sk-cube-grid .sk-cube {
+    width: 33%;
+    height: 33%;
+    background-color: #333;
+    float: left;
+    animation: sk-cube-grid-scale-delay 1.3s infinite ease-in-out;
+}
+
+.sk-cube-grid .sk-cube1 {
+    animation-delay: 0.2s;
+}
+
+.sk-cube-grid .sk-cube2 {
+    animation-delay: 0.3s;
+}
+
+.sk-cube-grid .sk-cube3 {
+    animation-delay: 0.4s;
+}
+
+.sk-cube-grid .sk-cube4 {
+    animation-delay: 0.1s;
+}
+
+.sk-cube-grid .sk-cube5 {
+    animation-delay: 0.2s;
+}
+
+.sk-cube-grid .sk-cube6 {
+    animation-delay: 0.3s;
+}
+
+.sk-cube-grid .sk-cube7 {
+    animation-delay: 0s;
+}
+
+.sk-cube-grid .sk-cube8 {
+    animation-delay: 0.1s;
+}
+
+.sk-cube-grid .sk-cube9 {
+    animation-delay: 0.2s;
+}
+
+@keyframes sk-cube-grid-scale-delay {
+    0%,
+    70%,
+    100% {
+        transform: scale3d(1, 1, 1);
+    }
+
+    35% {
+        transform: scale3d(0, 0, 1);
+    }
+}
+
+.bounce-enter-active {
+    animation: bounce-in 0.5s;
+}
+
+.bounce-leave-active {
+    animation: bounce-in 0.5s reverse;
+}
+@keyframes bounce-in {
+    0% {
+        transform: scale(0);
+    }
+
+    50% {
+        transform: scale(1.25);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.fade-enter-active {
+    animation: fade-in 0.3s;
+}
+
+.fade-leave-active {
+    animation: fade-in 0.3s reverse;
+}
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.slide-fade-enter-active {
+    animation: slide-fade-in 0.5s;
+}
+
+.slide-fade-leave-active {
+    animation: slide-fade-in 0.3s reverse;
+}
+@keyframes slide-fade-in {
+    0% {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.child-fill-height div {
+    height: calc(100% - 5px) !important;
+}
