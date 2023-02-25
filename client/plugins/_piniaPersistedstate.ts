@@ -1,7 +1,7 @@
 import { createPersistedState } from 'pinia-plugin-persistedstate'
 import cookies from 'cookie-universal'
 export default defineNuxtPlugin((nuxtApp) => {
-    const event = nuxtApp.ssrContext
+    const event = nuxtApp.ssrContext?.event
     const Cookies = cookies(event?.req, event?.res)
 
     function handleCookie(data: any, key: string, value = '', numberOfCookies = 5, cookie = '') {

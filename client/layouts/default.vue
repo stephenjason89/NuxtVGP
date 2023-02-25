@@ -43,10 +43,6 @@
 import { labels } from '~/graphql/Label'
 export default {
     name: 'DefaultLayout',
-    components: {
-        LazyHydrate: () => import('vue-lazy-hydration'),
-    },
-    middleware: 'auth',
     data: () => ({
         theme: useTheme(),
         drawer: false,

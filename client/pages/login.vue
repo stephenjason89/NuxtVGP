@@ -31,10 +31,11 @@
 </template>
 
 <script lang="ts">
+definePageMeta({
+    layout: false,
+})
 export default defineComponent({
     name: 'Login',
-    layout: 'blank',
-    middleware: 'auth',
     data: () => ({
         user: {
             username: 'admin@email.com',

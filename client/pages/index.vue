@@ -9,10 +9,11 @@
 </template>
 
 <script lang="ts">
+definePageMeta({
+    layout: false,
+})
 export default defineComponent({
     name: 'Home',
-    layout: 'blank',
-    middleware: 'auth',
     methods: {
         redirectToLogin() {
             if (getSubdomain(window.location.host)) this.$router.push('/login')

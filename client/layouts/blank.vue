@@ -1,12 +1,11 @@
 <template>
-    <v-app>
-        <v-main>
-            <slot />
-        </v-main>
-    </v-app>
+    <div>
+        Some default layout shared across all pages
+        <slot />
+    </div>
 </template>
 <script>
 export default {
-    name: 'BlankLayout',
+    name: 'Blank',
 }
 </script>
