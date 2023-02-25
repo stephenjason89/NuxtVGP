@@ -7,7 +7,7 @@ export default defineNuxtConfig({
     srcDir: 'client/',
     css: ['vuetify/lib/styles/main.sass', '~/assets/css/main.css'],
     build: {
-        transpile: ['vuetify', '@apollo/client/core', '@vue/apollo-composable', 'vue-apollo/ssr'],
+        transpile: ['vuetify', '@apollo/client/core', '@vue/apollo-composable'],
     },
     typescript: {
         strict: true,

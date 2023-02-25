@@ -166,7 +166,7 @@ const chartCollections = reactive<ChartCollection>({
  * Current module link
  * example: dashboard, products, branch, procurement, etc....
  */
-const link = (useRoute().params.module as string) ?? 'dashboard'
+const link = useRoute().params.module[0] ?? 'dashboard'
 
 /**
  * Use saved active state

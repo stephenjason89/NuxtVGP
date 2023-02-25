@@ -49,7 +49,7 @@
         "@pinia/nuxt": "^0.4.6",
         "@vue/apollo-composable": "^4.0.0-beta.2",
         "@vue/apollo-option": "^4.0.0-beta.2",
-        "apexcharts": "^3.37.0",
+        "apexcharts": "~3.36.3",
         "cookie-universal": "^2.2.2",
         "graphql": "^16.5.0",
         "graphql-tag": "^2.11.0",
@@ -62,7 +62,7 @@
         "pinia-plugin-persistedstate": "^3.1.0",
         "pusher-js": "5.1.1",
         "sass": "^1.57.1",
-        "vue-apexcharts": "^1.6.2",
+        "vue3-apexcharts": "^1.4.1",
         "vue-apollo": "^3.1.0",
         "vue-lazy-hydration": "2.0.0-beta.4",
         "vuetify": "^3.1.6"

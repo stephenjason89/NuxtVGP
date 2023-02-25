@@ -30,18 +30,53 @@
                 </v-btn>
             </div>
             <div style="height: calc(100% - 115px)">
-                <!--                <client-only>-->
-                <!--                    <ApexChart-->
-                <!--                        v-if="chart.options?.dataLabels"-->
-                <!--                        v-bind="$attrs"-->
-                <!--                        :type="type"-->
-                <!--                        height="100%"-->
-                <!--                        :options="chart.options"-->
-                <!--                        :series="chart.series?.value"-->
-                <!--                    />-->
-                <!--                </client-only>-->
+                <ApexChart
+                    v-if="chart.options?.dataLabels"
+                    v-bind="$attrs"
+                    :type="type"
+                    height="100%"
+                    :options="chart.options"
+                    :series="chart.series"
+                />
             </div>
-            <!-- <v-expand-transition>
+
+            <template v-if="!minimal">
+                <v-card-actions>
+                    <!-- <v-btn text small @click="showOptions = !showOptions">
+                        <Icon
+                            :color="themeColor"
+                            :name="showOptions ? 'ChevronUp' : 'ChevronDown'"
+                            class="mr-1"
+                        />
+                        Options
+                    </v-btn>
+                    <v-spacer /> -->
+                    <template v-if="pagination">
+                        <v-btn
+                            :color="themeColor"
+                            text
+                            small
+                            :disabled="params.page === 1 || chart.loading?.value"
+                            @click="changePage('previous')"
+                        >
+                            Prev
+                        </v-btn>
+                        <v-btn
+                            :color="themeColor"
+                            text
+                            small
+                            :disabled="
+                                chart.series?.value?.[0]?.data.length < params.itemsPerPage ||
+                                chart.loading?.value
+                            "
+                            @click="changePage('next')"
+                        >
+                            Next
+                        </v-btn>
+                    </template>
+                </v-card-actions>
+
+                <!-- <v-expand-transition>
                     <div v-show="showOptions">
                         <v-card-actions class="px-5">
                             <v-row>
@@ -59,6 +94,7 @@
                         </v-card-actions>
                     </div>
                 </v-expand-transition> -->
+            </template>
         </v-card>
 
         <!--        <template #placeholder>-->
@@ -69,6 +105,7 @@
 
 <script setup lang="ts">
 import { Ref } from 'vue'
+import ApexChart from 'vue3-apexcharts'
 import { deepMerge } from '~/assets/js/utils'
 import { ChartSeries } from '~/composables/useChartData'
 
@@ -193,9 +230,6 @@ const showChartOptions = ref(false)
 
 <script lang="ts">
 export default defineComponent({
-    components: {
-        ApexChart: () => (process.client ? import('vue-apexcharts') : null),
-    },
     inheritAttrs: false,
 })
 </script>

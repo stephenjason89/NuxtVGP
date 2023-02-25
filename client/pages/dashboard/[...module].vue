@@ -24,12 +24,9 @@ const { links } = useModuleLinks()
 const labels = useLabel()
 const theme = computed(() => useTheme())
 
-onMounted(() => {
-    console.log({ labels, theme })
-})
 const activeModule = computed(
     () =>
-        ({ ...{ color: 'blue' }, ...links[(useRoute().params.module as string) ?? 'dashboard'] } ?? {
+        ({ ...{ color: 'blue' }, ...links[useRoute().params.module[0] ?? 'dashboard'] } ?? {
             icon: 'CloseOctagonOutline',
             color: 'red',
             title: 'Page Not Found',

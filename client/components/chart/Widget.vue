@@ -1,9 +1,7 @@
 <template>
     <div v-bind="savedAttributes" :id="chart.title" ref="gridItemComponent" class="grid-stack-item">
         <div class="grid-stack-item-content">
-            <client-only>
-                <ChartBase v-bind="chart" />
-            </client-only>
+            <LazyChartBase v-bind="chart" />
         </div>
     </div>
 </template>
@@ -28,7 +26,7 @@ const props = defineProps({
  * Current module link
  * example: dashboard, products, branch, procurement, etc....
  */
-const link = (useRoute().params.module as string) ?? 'dashboard'
+const link = useRoute().params.module[0] ?? 'dashboard'
 
 /**
  * Ref Component for grid-stack-item

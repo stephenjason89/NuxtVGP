@@ -37,7 +37,7 @@ type Link = {
 const items = ref<Link[]>([
     {
         title: 'Home',
-        to: `/dashboard`,
+        to: `/dashboard/`,
         exact: true,
     },
 ])
@@ -45,12 +45,11 @@ const items = ref<Link[]>([
 const theme = useTheme()
 
 const route = useRoute()
-const texts = route.fullPath.split('/')
-for (let i = 0; i < texts.length; i++) {
-    if (texts[i] === '') continue
+const texts = route.fullPath.split('/').filter(Boolean)
+for (const [i, text] of texts.entries()) {
     items.value.push({
-        title: texts[i]?.charAt(0)?.toUpperCase() + texts[i].slice(1),
-        to: i === 1 ? (texts[i] !== 'dashboard' ? `/dashboard/${texts[i]}` : '/dashboard/') : texts[i],
+        title: text?.charAt(0)?.toUpperCase() + text.slice(1),
+        to: text !== 'dashboard' ? `/dashboard/${text}` : '/dashboard/',
         disabled: texts.length - 1 === i,
     })
 }

@@ -15,7 +15,7 @@ interface Links {
 }
 
 export default function useModuleLinks() {
-    const { result: total } = useQuery(
+    /*    const { result: total } = useQuery(
         gql`
             query dashboardTopLinks {
                 branchCount
@@ -23,7 +23,7 @@ export default function useModuleLinks() {
                 productCount
             }
         `,
-    )
+    ) */
 
     const links = reactive<Links>({
         dashboard: {
@@ -31,7 +31,7 @@ export default function useModuleLinks() {
             color: 'Blue',
             title: 'Dashboard',
             show: true,
-            to: '/dashboard',
+            to: '/dashboard/',
             items: [
                 {
                     title: 'Timekeeper Module',
@@ -45,14 +45,14 @@ export default function useModuleLinks() {
                     icon: 'PackageVariantClosed',
                     color: 'amber',
                     to: '/products/product-list',
-                    count: total.value?.productCount,
+                    // count: total.value?.productCount,
                 },
                 {
                     title: 'Clients',
                     icon: 'AccountGroupOutline',
                     color: 'cyan',
                     to: '/client/client-list',
-                    count: total.value?.clientCount,
+                    // count: total.value?.clientCount,
                 },
                 {
                     title: 'Manage Price list',
@@ -65,7 +65,7 @@ export default function useModuleLinks() {
                     icon: 'OfficeBuildingMarkerOutline',
                     color: 'green',
                     to: '/branch/manage-branch',
-                    count: total.value?.branchCount,
+                    // count: total.value?.branchCount,
                 },
                 {
                     title: 'Settings',
