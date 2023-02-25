@@ -1,4 +1,5 @@
 import vuetify from 'vite-plugin-vuetify'
+import dynamicImport from 'vite-plugin-dynamic-import'
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
 export default defineNuxtConfig({
@@ -33,7 +34,10 @@ export default defineNuxtConfig({
     modules: [
         ['@pinia/nuxt', { autoImports: ['defineStore', 'acceptHMRUpdate'] }],
         async (options, nuxt) => {
-            await nuxt.hooks.hook('vite:extendConfig', (config: any) => config.plugins.push(vuetify()))
+            await nuxt.hooks.hook('vite:extendConfig', (config: any) => {
+                config.plugins.push(vuetify())
+                config.plugins.push(dynamicImport())
+            })
         },
     ],
     runtimeConfig: {

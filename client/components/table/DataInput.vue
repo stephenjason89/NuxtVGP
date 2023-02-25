@@ -230,8 +230,7 @@ export default {
         model = model.charAt(0).toUpperCase() + model.slice(1)
 
         try {
-            const { [method]: gql } = await import(/* @vite-ignore */ `../../graphql/${model}`)
-            console.log('aaaa', gql)
+            const { [method]: gql } = await import(`~/graphql/${model}`)
             await this.$apollo.addSmartQuery('items', {
                 query: gql,
                 variables() {

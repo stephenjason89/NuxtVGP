@@ -8,7 +8,7 @@ specifiers:
   '@vue-macros/nuxt': ^1.2.1
   '@vue/apollo-composable': ^4.0.0-beta.2
   '@vue/apollo-option': ^4.0.0-beta.2
-  apexcharts: ^3.37.1
+  apexcharts: ^3.37.0
   cookie-universal: ^2.2.2
   cz-conventional-changelog: ^3.3.0
   eslint: ^8.32.0
@@ -36,6 +36,7 @@ specifiers:
   stylelint-config-prettier: ^9.0.4
   stylelint-config-standard-scss: ^6.1.0
   stylelint-config-standard-vue: ^1.0.0
+  vite-plugin-dynamic-import: ^1.2.7
   vite-plugin-vuetify: ^1.0.1
   vue-apexcharts: ^1.6.2
   vue-apollo: ^3.1.0
@@ -84,6 +85,7 @@ devDependencies:
   stylelint-config-prettier: 9.0.5_stylelint@14.16.1
   stylelint-config-standard-scss: 6.1.0_stylelint@14.16.1
   stylelint-config-standard-vue: 1.0.0_kbto3rg3njmczth2rrsgfnlsqa
+  vite-plugin-dynamic-import: 1.2.7
   vite-plugin-vuetify: 1.0.2_vuetify@3.1.6
 
 packages:
@@ -8058,6 +8060,12 @@ packages:
       vscode-languageserver: 7.0.0
       vscode-languageserver-textdocument: 1.0.8
       vscode-uri: 3.0.7
+    dev: true
+
+  /vite-plugin-dynamic-import/1.2.7:
+    resolution: {integrity: sha512-n1fjBaYF8ByqORv7hpEaZQiQie8sNiWGU61DpYs+fgToGmzGIgThUI8BCnW3RICVK4gJC2sDNn7NK1RzTvRyEA==}
+    dependencies:
+      fast-glob: 3.2.12
     dev: true
 
   /vite-plugin-vuetify/1.0.2_vuetify@3.1.6:

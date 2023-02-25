@@ -48,7 +48,6 @@
 
 <script setup lang="ts">
 import 'gridstack/dist/gridstack.min.css'
-import { GridStack } from 'gridstack'
 import cloneDeep from 'lodash.clonedeep'
 import { Charts } from '~/composables/useChart'
 
@@ -183,7 +182,7 @@ const activeCollection = computed<Charts>(() => chartCollections?.[link] ?? {})
 let activeCollectionInitialState: Charts
 const onEdit = ref(false)
 
-let grid: GridStack
+let grid: any
 
 /**
  * Options parameters for GridStack.init()
@@ -251,13 +250,14 @@ watch(
     [activeCollection, onEdit],
     () => {
         grid?.destroy(false)
-        nextTick(() => {
+        nextTick(async () => {
             if (!activeCollection.value?.charts || process.server) return
-            // grid = GridStack.init({
-            //     ...gridOptions,
-            //     disableResize: !onEdit.value,
-            //     disableDrag: !onEdit.value,
-            // })
+            const { GridStack } = await import('gridstack')
+            grid = GridStack.init({
+                ...gridOptions,
+                disableResize: !onEdit.value,
+                disableDrag: !onEdit.value,
+            })
         })
     },
     { deep: true, immediate: true },

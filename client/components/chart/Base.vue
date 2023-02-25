@@ -20,7 +20,27 @@
                     </div>
                 </div>
             </v-card>
+            <div class="d-flex justify-space-between pa-2">
+                <v-card-text class="font-weight-bold">
+                    {{ title }}
+                </v-card-text>
 
+                <v-btn small icon depressed class="align-self-center" @click="showChartOptions = true">
+                    <Icon name="DotsVertical" width="20" />
+                </v-btn>
+            </div>
+            <div style="height: calc(100% - 115px)">
+                <!--                <client-only>-->
+                <!--                    <ApexChart-->
+                <!--                        v-if="chart.options?.dataLabels"-->
+                <!--                        v-bind="$attrs"-->
+                <!--                        :type="type"-->
+                <!--                        height="100%"-->
+                <!--                        :options="chart.options"-->
+                <!--                        :series="chart.series?.value"-->
+                <!--                    />-->
+                <!--                </client-only>-->
+            </div>
             <!-- <v-expand-transition>
                     <div v-show="showOptions">
                         <v-card-actions class="px-5">
@@ -147,7 +167,7 @@ const chart: chartData = reactive({ options: {} })
 const themeColor = useUser().companyInfo.theme?.color
 const theme = useTheme()
 
-import(/* @vite-ignore */ '../../graphql/' + props.query.model).then(({ [props.query.method]: query }) => {
+import('~/graphql/' + props.query.model).then(({ [props.query.method]: query }) => {
     if (props.data.multiple) params.filters = { ...params.filters, ...{ years: [years[0], years[1]] } }
     for (const [key, value] of Object.entries(props.filters))
         if (value?.attrs?.initialValue)
