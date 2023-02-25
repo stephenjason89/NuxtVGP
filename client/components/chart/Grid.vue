@@ -2,7 +2,7 @@
     <div v-if="activeCollection?.charts" class="pa-3">
         <div class="d-flex align-center mb-3">
             <template v-if="onEdit">
-                <v-btn-toggle dense>
+                <v-btn-toggle dense theme="dark">
                     <ChartMenu :collection="activeCollection" />
 
                     <v-btn small depressed class="light-green darken-1 white--text" @click="saveGrids">
@@ -248,16 +248,14 @@ function saveGrids() {
  */
 watch(
     [activeCollection, onEdit],
-    () => {
+    async () => {
+        if (!activeCollection.value?.charts || process.server) return
+        const { GridStack } = await import('gridstack')
         grid?.destroy(false)
-        nextTick(async () => {
-            if (!activeCollection.value?.charts || process.server) return
-            const { GridStack } = await import('gridstack')
-            grid = GridStack.init({
-                ...gridOptions,
-                disableResize: !onEdit.value,
-                disableDrag: !onEdit.value,
-            })
+        grid = GridStack.init({
+            ...gridOptions,
+            disableResize: !onEdit.value,
+            disableDrag: !onEdit.value,
         })
     },
     { deep: true, immediate: true },
