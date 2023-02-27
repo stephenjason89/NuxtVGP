@@ -4,7 +4,6 @@
 <script>
 import { hexToCSSFilter } from 'hex-to-css-filter'
 import colors from 'vuetify/lib/util/colors'
-import { kebabize } from '~/assets/js/utils'
 export default {
     name: 'Icon',
     props: {

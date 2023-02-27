@@ -115,26 +115,6 @@ export function numberFormatPeso(number, options = {}) {
     return Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP', ...options }).format(number)
 }
 
-export function isFunction(value) {
-    return typeof value === 'function'
-}
-
-export function isObject(value) {
-    return typeof value === 'object' && !Array.isArray(value) && value !== null
-}
-
-export function isString(value) {
-    return typeof value === 'string'
-}
-
-export function isNumber(value) {
-    return typeof value === 'number'
-}
-
-export function isBoolean(value) {
-    return typeof value === 'boolean'
-}
-
 export function range(start, stop, step = 1, includeStart = true, includeStop = true) {
     const list = []
 
@@ -162,8 +142,4 @@ export function deepMerge(current, updates) {
         else deepMerge(current[key], updates[key])
     }
     return current
-}
-
-export function kebabize(str, delim = '-') {
-    return str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? delim : '') + $.toLowerCase())
 }

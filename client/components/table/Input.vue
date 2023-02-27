@@ -201,8 +201,6 @@
 </template>
 
 <script>
-import { isFunction, isString, isObject } from '~/assets/js/utils'
-
 export default {
     name: 'TableInput',
     inheritAttrs: false,
