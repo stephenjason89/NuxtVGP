@@ -1,29 +1,40 @@
 <template>
-    <v-menu absolute :close-on-content-click="false">
+    <v-menu :close-on-content-click="false" absolute>
         <template #activator="{ props }">
-            <v-btn small depressed class="blue" v-bind="props">
-                <Icon name="ChevronDown" color="white" size="20" />
+            <v-btn class="bg-blue-darken-1" icon size="x-small" v-bind="props" variant="flat">
+                <Icon color="white" name="ChevronDown" size="20" />
             </v-btn>
         </template>
 
-        <v-card width="500">
-            <v-list-item>
-                <Icon name="ChartBar" size="20" class="mr-3" />
-                Select Chart
-            </v-list-item>
+        <v-card width="450">
+            <v-list lines="two" select-strategy="classic">
+                <v-list-subheader class="font-weight-bold">Select Chart</v-list-subheader>
 
-            <v-divider />
+                <v-divider></v-divider>
 
-            <v-list-item v-for="(chart, index) in collection.charts" :key="index">
-                <v-checkbox
-                    :input-value="chart.active !== false"
-                    class="mr-3"
-                    @change="changeChartStatus(chart)"
-                />
-                <v-list-item-action>
-                    <v-list-item-title>{{ chart.title }} Chart</v-list-item-title>
-                </v-list-item-action>
-            </v-list-item>
+                <v-list-item
+                    v-for="(chart, index) in collection.charts"
+                    :key="index"
+                    :subtitle="chart.description"
+                    :title="chart.title"
+                    value="notifications"
+                >
+                    <template #prepend="{ isActive }">
+                        <v-list-item-action start>
+                            <v-checkbox-btn
+                                :input-value="chart.active !== false"
+                                :model-value="isActive"
+                                @change="changeChartStatus(chart)"
+                            ></v-checkbox-btn>
+                        </v-list-item-action>
+                    </template>
+
+                    <v-list-item-subtitle>
+                        This is a sample Chart Description: Lorem ipsum dolor sit amet, consectetur
+                        adipisicing elit. Architecto asperiores facilis illo iste maiores minus nisi, voluptas
+                    </v-list-item-subtitle>
+                </v-list-item>
+            </v-list>
         </v-card>
     </v-menu>
 </template>

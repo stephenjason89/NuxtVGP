@@ -2,18 +2,15 @@
     <div v-if="activeCollection?.charts" class="pa-3">
         <div class="d-flex align-center mb-3">
             <template v-if="onEdit">
-                <v-btn-toggle dense theme="dark">
-                    <ChartMenu :collection="activeCollection" />
-
-                    <v-btn small depressed class="light-green darken-1 white--text" @click="saveGrids">
-                        <Icon name="ContentSaveCheck" color="white" size="20" />
-                    </v-btn>
-                </v-btn-toggle>
+                <ChartMenu :collection="activeCollection" />
+                <v-btn class="bg-green-darken-1 ml-1" icon size="x-small" variant="flat" @click="saveGrids">
+                    <Icon color="white" name="ContentSaveCheck" size="20" />
+                </v-btn>
 
                 <v-spacer />
 
-                <v-btn icon depressed @click="cancelEditing">
-                    <Icon name="Close" size="20" />
+                <v-btn class="bg-red-darken-1" icon size="x-small" variant="flat" @click="cancelEditing">
+                    <Icon color="white" name="Close" size="20" />
                 </v-btn>
             </template>
 
@@ -23,8 +20,8 @@
 
                 <v-spacer />
 
-                <v-btn depressed icon @click="toggleEditing">
-                    <Icon name="Drag" size="20" />
+                <v-btn class="bg-green-darken-1" icon size="x-small" variant="flat" @click="toggleEditing">
+                    <Icon color="white" name="Drag" size="20" />
                 </v-btn>
             </template>
         </div>
@@ -46,9 +43,10 @@
     </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import 'gridstack/dist/gridstack.min.css'
 import cloneDeep from 'lodash.clonedeep'
+import { ComputedRef } from 'vue'
 import { Charts } from '~/composables/useChart'
 
 type ChartCollection = {
@@ -178,7 +176,7 @@ for (const chart of chartCollections[link]?.charts ?? [])
 /**
  * ex. chartCollections['dashboard'], chartCollections['branch'], chartCollections['products']
  */
-const activeCollection = computed<Charts>(() => chartCollections?.[link] ?? {})
+const activeCollection: ComputedRef<Charts> = computed(() => chartCollections?.[link] ?? {})
 let activeCollectionInitialState: Charts
 const onEdit = ref(false)
 
@@ -211,6 +209,7 @@ function cancelEditing() {
     onCancelEditing.value = !onCancelEditing.value
     chartCollections[link] = activeCollectionInitialState
 }
+
 /**
  * Function for cancel editing chart grids
  */

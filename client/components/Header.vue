@@ -1,18 +1,20 @@
 <template>
     <div class="d-flex align-center">
-        <Icon v-if="icon" :name="icon.name" :color="icon.color" />
+        <Icon v-if="icon" :color="icon.color" :name="icon.name" />
         <h1
             v-if="title"
-            class="ml-2 text-h4 font-weight-medium secondary--text"
             :style="{ color: theme?.fontColor + ' !important' }"
+            class="ml-2 text-h4 font-weight-medium secondary--text"
         >
             {{ title }}
         </h1>
     </div>
-    <v-breadcrumbs v-if="hasBreadcrumbs" class="py-1 px-0 mb-5" :items="items" divider=">" />
+    <v-breadcrumbs v-if="hasBreadcrumbs" :items="items" class="py-1 px-0 mb-5" divider=">" />
 </template>
 
 <script lang="ts" setup>
+import { Ref } from 'vue'
+
 defineProps({
     title: {
         type: String,
@@ -34,7 +36,7 @@ type Link = {
     exact?: boolean
     disabled?: boolean
 }
-const items = ref<Link[]>([
+const items: Ref<Link[]> = ref([
     {
         title: 'Home',
         to: `/dashboard/`,

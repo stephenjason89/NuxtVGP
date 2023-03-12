@@ -1,11 +1,19 @@
 <template>
     <client-only>
-        <v-card class="dashboard-card-shadow fill-height" :loading="chart.loading?.value" flat outlined>
+        <v-card class="fill-height elevation-3 chart-card" variant="outlined">
+            <v-progress-linear v-if="chart.loading" color="green-darken-1" indeterminate />
+
             <v-card v-show="showChartOptions" class="chart-option rounded-0" flat>
                 <div class="d-flex justify-space-between pa-2">
                     <strong>Options</strong>
-                    <v-btn small icon depressed class="align-self-center" @click="showChartOptions = false">
-                        <Icon name="Close" width="20" />
+                    <v-btn
+                        class="bg-red-darken-1"
+                        icon
+                        size="x-small"
+                        variant="flat"
+                        @click="showChartOptions = false"
+                    >
+                        <Icon color="white" name="Close" width="20" />
                     </v-btn>
                 </div>
                 <v-divider />
@@ -25,50 +33,48 @@
                     {{ title }}
                 </v-card-text>
 
-                <v-btn small icon depressed class="align-self-center" @click="showChartOptions = true">
-                    <Icon name="DotsVertical" width="20" />
+                <v-btn
+                    :disabled="chart.loading"
+                    class="bg-blue-darken-1"
+                    icon
+                    size="x-small"
+                    variant="flat"
+                    @click="showChartOptions = true"
+                >
+                    <Icon color="white" name="DotsVertical" width="20" />
                 </v-btn>
             </div>
             <div style="height: calc(100% - 115px)">
                 <ApexChart
                     v-if="chart.options?.dataLabels"
-                    v-bind="$attrs"
-                    :type="type"
-                    height="100%"
                     :options="chart.options"
                     :series="chart.series"
+                    :type="type"
+                    height="100%"
+                    v-bind="$attrs"
                 />
             </div>
 
             <template v-if="!minimal">
                 <v-card-actions>
-                    <!-- <v-btn text small @click="showOptions = !showOptions">
-                        <Icon
-                            :color="themeColor"
-                            :name="showOptions ? 'ChevronUp' : 'ChevronDown'"
-                            class="mr-1"
-                        />
-                        Options
-                    </v-btn>
-                    <v-spacer /> -->
                     <template v-if="pagination">
                         <v-btn
                             :color="themeColor"
-                            text
-                            small
                             :disabled="params.page === 1 || chart.loading?.value"
+                            small
+                            text
                             @click="changePage('previous')"
                         >
                             Prev
                         </v-btn>
                         <v-btn
                             :color="themeColor"
-                            text
-                            small
                             :disabled="
                                 chart.series?.value?.[0]?.data.length < params.itemsPerPage ||
                                 chart.loading?.value
                             "
+                            small
+                            text
                             @click="changePage('next')"
                         >
                             Next
@@ -96,14 +102,10 @@
                 </v-expand-transition> -->
             </template>
         </v-card>
-
-        <!--        <template #placeholder>-->
-        <!--            <v-skeleton-loader class="mx-auto" :min-height="height" type="card" />-->
-        <!--        </template>-->
     </client-only>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { Ref } from 'vue'
 import ApexChart from 'vue3-apexcharts'
 import { deepMerge } from '~/assets/js/utils'
@@ -186,6 +188,7 @@ const params: any = reactive({
 })
 
 const page: { [key: string]: any } = { timeout: null, current: params.page }
+
 function changePage(direction: 'previous' | 'next') {
     if (direction === 'next') page.current++
     else page.current--
@@ -194,11 +197,13 @@ function changePage(direction: 'previous' | 'next') {
         params.page = page.current
     }, 400)
 }
+
 interface chartData {
     options: object
     series?: Ref<ChartSeries[]>
-    loading?: Ref<Boolean>
+    loading?: boolean
 }
+
 const chart: chartData = reactive({ options: {} })
 // const showOptions = ref<boolean>(false)
 const themeColor = useUser().companyInfo.theme?.color
@@ -245,5 +250,9 @@ export default defineComponent({
     position: absolute;
     background: white;
     z-index: 1;
+}
+
+.chart-card {
+    border: 1px solid #c6c6c6;
 }
 </style>
