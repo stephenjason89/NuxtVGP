@@ -1,18 +1,18 @@
 <template>
     <v-navigation-drawer
         v-model="app.sidebar.drawer.local"
-        :temporary="!app.sidebar.pinned"
         app
-        color="#424242"
-        image="/img/nav-bg.jpg"
         mini-variant-width="80"
         theme="dark"
         touchless
-        width="300"
+        width="350"
     >
-        <v-list-item prepend-avatar="/img/msi-logo.png" subtitle="Systems" title="Apollo">
-            <template #append>
-                <v-btn icon size="x-small" variant="flat" @click="pin">
+        <div class="sidebar-list">
+            <div class="sidebar-list-header d-flex">
+                <span class="align-self-center ml-3">Apollo Systems</span>
+
+                <v-spacer />
+                <v-btn size="x-small" class="align-self-center mr-3" variant="flat" icon>
                     <Icon
                         :name="app.sidebar.pinned ? 'PinOff' : 'Pin'"
                         class="v-icon--link"
@@ -20,26 +20,34 @@
                         size="15"
                     />
                 </v-btn>
-            </template>
-        </v-list-item>
-        <v-divider />
-        <v-list expand nav>
-            <!-- Items -->
-            <v-list-item
-                v-for="(link, i) in links"
-                :key="i"
-                :color="companyInfo.theme.color"
-                :to="link.to"
-                class="pa-3"
-                exact
-                @click="link.action ? link.action(logoutModal, logout) : () => {}"
-            >
-                <template #prepend>
-                    <Icon :name="link.icon" class="mr-5" color="white" />
-                </template>
-                <v-list-item-title>{{ labels[link.title] ?? link.title }}</v-list-item-title>
-            </v-list-item>
-        </v-list>
+            </div>
+            <div class="sidebar-list-content">
+                <v-list>
+                    <v-list-group v-for="(link, i) in links" :key="i">
+                        <template #activator="{ props }">
+                            <v-list-item v-bind="props" class="pa-4">
+                                <template #prepend>
+                                    <Icon :name="link.icon" class="mr-5" color="white" size="30" />
+                                </template>
+                                <span>{{ link.title }}</span>
+                            </v-list-item>
+                        </template>
+
+                        <v-list-item
+                            v-for="(item, index) in link.items"
+                            :key="index"
+                            :to="item.to"
+                            class="pa-3"
+                        >
+                            <div class="d-flex">
+                                <Icon :name="item.icon" color="white" class="mr-3" />
+                                <span>{{ item.title }}</span>
+                            </div>
+                        </v-list-item>
+                    </v-list-group>
+                </v-list>
+            </div>
+        </div>
     </v-navigation-drawer>
 </template>
 <script>
@@ -88,3 +96,19 @@ export default {
     },
 }
 </script>
+
+<style scoped>
+.sidebar-list {
+    height: 100vh;
+}
+
+.sidebar-list-header {
+    height: 64px;
+    border-bottom: 0.5px solid #666;
+}
+
+.sidebar-list-content {
+    height: calc(100vh - 64px);
+    overflow: auto;
+}
+</style>

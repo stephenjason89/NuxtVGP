@@ -26,6 +26,7 @@ specifiers:
     localforage: ^1.10.0
     lodash.clonedeep: ^4.5.0
     nuxt: ^3.2.2
+    nuxt-icon: ^0.3.2
     overlayscrollbars: ^2.1.0
     pinia-plugin-persistedstate: ^3.1.0
     postcss-html: ^1.5.0
@@ -79,6 +80,7 @@ devDependencies:
     husky: 8.0.3
     lint-staged: 13.1.2
     nuxt: 3.2.2_tedb3x5aukk3brkywiy33pcyma
+    nuxt-icon: 0.3.2
     postcss-html: 1.5.0
     prettier: 2.8.4
     stylelint: 14.16.1
@@ -1224,6 +1226,24 @@ packages:
             {
                 integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==,
             }
+        dev: true
+
+    /@iconify/types/2.0.0:
+        resolution:
+            {
+                integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==,
+            }
+        dev: true
+
+    /@iconify/vue/4.1.0:
+        resolution:
+            {
+                integrity: sha512-rBQVxNoSDooqgWkQg2MqkIHkH/huNuvXGqui5wijc1zLnU7TKzbBHW9VGmbnV4asNTmIHmqV4Nvt0M2rZ/9nHA==,
+            }
+        peerDependencies:
+            vue: '>=3'
+        dependencies:
+            '@iconify/types': 2.0.0
         dev: true
 
     /@ioredis/commands/1.2.0:
@@ -3513,6 +3533,26 @@ packages:
         engines: { node: ^12.17.0 || ^14.13 || >=16.0.0 }
         dev: true
 
+    /changelogen/0.4.1:
+        resolution:
+            {
+                integrity: sha512-p1dJO1Z995odIxdypzAykHIaUu+XnEvwYPSTyKJsbpL82o99sxN1G24tbecoMxTsV4PI+ZId82GJXRL2hhOeJA==,
+            }
+        hasBin: true
+        dependencies:
+            c12: 1.1.2
+            consola: 2.15.3
+            convert-gitmoji: 0.1.3
+            execa: 6.1.0
+            mri: 1.2.0
+            node-fetch-native: 1.0.2
+            pkg-types: 1.0.2
+            scule: 1.0.0
+            semver: 7.3.8
+        transitivePeerDependencies:
+            - supports-color
+        dev: true
+
     /chardet/0.7.0:
         resolution:
             {
@@ -3829,6 +3869,13 @@ packages:
         resolution:
             {
                 integrity: sha512-SmmCYnOniSsAa9GqWOeLqc179lfr5TRu5b4QFDkbsrJ5TZjPJx85wtOr3zn+1dbeNiXDKGPbZ72IKbPhLXh/Lg==,
+            }
+        dev: true
+
+    /convert-gitmoji/0.1.3:
+        resolution:
+            {
+                integrity: sha512-t5yxPyI8h8KPvRwrS/sRrfIpT2gJbmBAY0TFokyUBy3PM44RuFRpZwHdACz+GTSPLRLo3s4qsscOMLjHiXBwzw==,
             }
         dev: true
 
@@ -7947,6 +7994,38 @@ packages:
         hasBin: true
         optionalDependencies:
             fsevents: 2.3.2
+        dev: true
+
+    /nuxt-config-schema/0.4.5:
+        resolution:
+            {
+                integrity: sha512-Y5anu5puDfMJfDP7IYjXsn6Dvj262HtjZqa73jCBbFRCc5jnjrs+BEpJJmtPG32ZsqzO2+RL4oTNb3H6IfKZLQ==,
+            }
+        dependencies:
+            '@nuxt/kit': 3.2.2
+            changelogen: 0.4.1
+            defu: 6.1.2
+            jiti: 1.17.1
+            pathe: 1.1.0
+            untyped: 1.2.2
+        transitivePeerDependencies:
+            - rollup
+            - supports-color
+        dev: true
+
+    /nuxt-icon/0.3.2:
+        resolution:
+            {
+                integrity: sha512-066pfova2nE9GZDvHE9oMkqJCwsnJvOZKU2FOSzRpjfXupH3UPtP9Zw8+C2wvZ82Nel6fuRoIUNQh5Sx8ZeQrQ==,
+            }
+        dependencies:
+            '@iconify/vue': 4.1.0
+            '@nuxt/kit': 3.2.2
+            nuxt-config-schema: 0.4.5
+        transitivePeerDependencies:
+            - rollup
+            - supports-color
+            - vue
         dev: true
 
     /nuxt/3.2.2_tedb3x5aukk3brkywiy33pcyma:

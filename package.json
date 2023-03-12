@@ -35,6 +35,7 @@
         "husky": "^8.0.3",
         "lint-staged": "^13.1.0",
         "nuxt": "^3.2.2",
+        "nuxt-icon": "^0.3.2",
         "postcss-html": "^1.5.0",
         "prettier": "^2.7.1",
         "stylelint": "^14.16.1",
@@ -62,9 +63,9 @@
         "pinia-plugin-persistedstate": "^3.1.0",
         "pusher-js": "5.1.1",
         "sass": "^1.57.1",
-        "vue3-apexcharts": "^1.4.1",
         "vue-apollo": "^3.1.0",
         "vue-lazy-hydration": "2.0.0-beta.4",
+        "vue3-apexcharts": "^1.4.1",
         "vuetify": "^3.1.6"
     }
 }
