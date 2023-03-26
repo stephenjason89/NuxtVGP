@@ -4,7 +4,7 @@ This template incorporates the utilization of Nuxt3, Vuetify, GraphQL, and Pinia
 
 The source directory was repositioned to './client' to optimize project structure and facilitate easier integration with other backend frameworks if required.
 
-### To learn more, you can checkout:
+### To learn more, you can check out:
 
 -[Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction)
 
@@ -23,7 +23,6 @@ The template has been pre-configured with state-of-the-art linters like eslint, 
 Make sure to install the dependencies:
 
 ```bash
-# pnpm
 pnpm install
 ```
 
