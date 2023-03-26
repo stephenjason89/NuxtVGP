@@ -1,4 +1,5 @@
 import vuetify from 'vite-plugin-vuetify'
+import { InlineConfig } from 'vite'
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
 export default defineNuxtConfig({
@@ -14,7 +15,7 @@ export default defineNuxtConfig({
     },
     modules: ['@nuxtjs/apollo', ['@pinia/nuxt', { autoImports: ['defineStore', 'acceptHMRUpdate'] }]],
     hooks: {
-        'vite:extendConfig': (config) => {
+        'vite:extendConfig': (config: InlineConfig) => {
             config?.plugins?.push(vuetify())
         },
     },

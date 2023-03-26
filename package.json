@@ -26,24 +26,24 @@
         "@nuxtjs/apollo": "5.0.0-alpha.5",
         "@nuxtjs/eslint-config-typescript": "^12.0.0",
         "cz-conventional-changelog": "^3.3.0",
-        "eslint": "^8.32.0",
-        "eslint-config-prettier": "^8.6.0",
+        "eslint": "^8.36.0",
+        "eslint-config-prettier": "^8.8.0",
         "eslint-plugin-nuxt": "^4.0.0",
         "eslint-plugin-prettier": "^4.2.1",
         "husky": "^8.0.3",
-        "lint-staged": "^13.1.0",
-        "nuxt": "^3.2.3",
+        "lint-staged": "^13.2.0",
+        "nuxt": "^3.3.2",
         "postcss-html": "^1.5.0",
-        "prettier": "^2.8.4",
+        "prettier": "^2.8.7",
         "stylelint": "^14.16.1",
-        "stylelint-config-prettier": "^9.0.4",
+        "stylelint-config-prettier": "^9.0.5",
         "stylelint-config-standard-scss": "^6.1.0",
         "stylelint-config-standard-vue": "^1.0.0",
         "vite-plugin-vuetify": "^1.0.2"
     },
     "dependencies": {
-        "@pinia/nuxt": "^0.4.6",
-        "sass": "^1.57.1",
-        "vuetify": "^3.1.8"
+        "@pinia/nuxt": "^0.4.7",
+        "sass": "^1.60.0",
+        "vuetify": "^3.1.11"
     }
 }
