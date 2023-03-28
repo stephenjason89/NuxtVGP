@@ -4,6 +4,8 @@
         <h5>Nuxt 3 / Vuetify / Graphql / Pinia</h5>
         <h3 class="my-5">
             Example Pinia
+            <v-btn icon="mdi-home"></v-btn>
+            <v-icon icon="mdi-home" />
             <v-chip color="blue">useCounter</v-chip>
         </h3>
         <v-card class="mx-auto my-12" max-width="374">
