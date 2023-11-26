@@ -114,7 +114,7 @@ const { data } = useAsyncQuery<{
 		id: String
 		name: String
 		active: Boolean
-	}
+	}[]
 }>(query)
 const ships = computed(() => data.value?.ships ?? [])
 </script>
