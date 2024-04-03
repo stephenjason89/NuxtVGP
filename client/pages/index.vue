@@ -121,8 +121,6 @@
 <script lang="ts" setup>
 import { NULL } from 'sass'
 
-// const store = useCounter()
-// const selection = ref(0);
 const query = gql`
 	query Query($find: LaunchFind) {
 		launches(find: $find) {
