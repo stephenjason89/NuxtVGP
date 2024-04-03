@@ -95,7 +95,23 @@
 				</tr>
 			</tbody>
 		</v-table> -->
-		<v-table>
+		<v-text-field 	label="Year" 
+						hide-details="auto"
+						placeholder="Enter year"
+						type="year"
+						theme="dark"
+						@update:model-value="OnChange">
+		</v-text-field>
+		<v-radio-group 	v-model="sortString"
+						@update:model-value="OnRadioChange">
+			<label>Sort</label>
+			<v-radio label="Ascending" value="Ascending"></v-radio>
+			<v-radio label="Descending" value="Descending"></v-radio>
+		</v-radio-group>
+		<v-table 	theme="dark"
+					density="comfortable"
+					height="980px"
+					fixed-header>
 			<thead>
 				<tr>
 					<th class="text-left">Mission Name</th>
@@ -106,12 +122,12 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="launch in launches" :key="launch.mission_name">
+				<tr v-for="launch in getLaunches" :key="launch.mission_name">
 					<td>{{ launch.mission_name }}</td>
-					<td>{{ ConvertToDate(launch.launch_date_local) }}</td>
-					<td v-if="NULL">{{ 'No Launch Site' }}</td>
-					<td v-else>{{ launch.launch_site.site_name }}</td>
-					<td>{{ launch.rocket.rocket_name }}</td>
+					<td width="232px">{{ convertToDate(launch.launch_date_local, launch.launch_year) }}</td>
+					<td v-if="NULL" width="132px">{{ 'No Launch Site Name' }}</td>
+					<td v-else width="132px">{{ launch.launch_site.site_name }}</td>
+					<td width="132px">{{ launch.rocket.rocket_name }}</td>
 					<td>{{ launch.details }}</td>
 				</tr>
 			</tbody>
@@ -122,18 +138,19 @@
 import { NULL } from 'sass'
 
 const query = gql`
-	query Query($find: LaunchFind) {
-		launches(find: $find) {
+	query Query($find: LaunchFind, $sort: String, $limit: Int) {
+		launches(find: $find, sort: $sort, limit: $limit) {
 			mission_name
 			launch_site {
-				site_name
+			site_name
 			}
 			rocket {
-				rocket_name
+			rocket_name
 			}
 			details
-			launch_date_local
 			id
+			launch_date_local
+			launch_year
 		}
 	}
 `
@@ -150,14 +167,81 @@ const { data } = await useAsyncQuery<{
 		}
 		details: string
 		launch_date_local: string
+		launch_year: string
 	}[]
 }>(query)
 
-const launches = data.value.launches
+const launches = data.value.launches;
+const launchesToShow = ref(launches)
 
-function ConvertToDate(dateString: string) {
+const yearFilters = ref(['All']);
+const yearActiveFilter = ref('All');
+
+function filterLaunches(filter:string){
+	yearActiveFilter.value = filter;
+}
+
+const sortString = ref("Ascending")
+
+const getLaunches = computed(() => {
+	let launchArray = [...launchesToShow.value]
+	
+	if(sortString.value === 'Ascending')
+	{
+		launchArray.sort((itemA, itemB) => {
+			if(itemA.launch_year > itemB.launch_year)
+			{
+				return 1;
+			}
+			if(itemA.launch_year < itemB.launch_year)
+			{
+				return -1;
+			}
+			return 0;
+		})
+	}else{
+		launchArray.sort((itemA, itemB) => {
+			if(itemA.launch_year > itemB.launch_year)
+			{
+				return -1;
+			}
+			if(itemA.launch_year < itemB.launch_year)
+			{
+				return 1;
+			}
+			return 0;
+		})
+	}
+	if (yearActiveFilter.value === 'All')
+	{
+		return launchArray;
+	}
+	
+	return launchArray.filter((item) => item.launch_year === yearActiveFilter.value)
+})
+
+function convertToDate(dateString: string, yearStr: string) {
 	const dStr: string = dateString
 	const res: Date = new Date(dStr)
+	if(!yearFilters.value.includes(yearStr))
+	{
+		yearFilters.value.push(yearStr);
+	}
 	return res
 }
+
+function OnRadioChange(input: any){
+	sortString.value = input
+}
+
+function OnChange(inputString: string) {
+	if(inputString === "")
+	{
+		filterLaunches("All");
+		return;
+	}
+	filterLaunches(inputString);
+	
+}
+
 </script>
