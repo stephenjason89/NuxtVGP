@@ -1,6 +1,6 @@
 <template>
 	<v-container>
-		<h2>
+		<!-- <h2>
 			<v-icon icon="mdi-vuetify" />
 			Starter Template
 		</h2>
@@ -94,27 +94,72 @@
 					</td>
 				</tr>
 			</tbody>
+		</v-table> -->
+		<v-table>
+			<thead>
+				<tr>
+					<th class="text-left">Mission Name</th>
+					<th class="text-left">Launch Date</th>
+					<th class="text-left">Launch Site Name</th>
+					<th class="text-left">Rocket Name</th>
+					<th class="text-left">Details</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="launch in launches" :key="launch.mission_name">
+					<td>{{ launch.mission_name }}</td>
+					<td>{{ ConvertToDate(launch.launch_date_local) }}</td>
+					<td v-if="NULL">{{ 'No Launch Site' }}</td>
+					<td v-else>{{ launch.launch_site.site_name }}</td>
+					<td>{{ launch.rocket.rocket_name }}</td>
+					<td>{{ launch.details }}</td>
+				</tr>
+			</tbody>
 		</v-table>
 	</v-container>
 </template>
 <script lang="ts" setup>
-const store = useCounter()
-const selection = ref(0)
+import { NULL } from 'sass'
+
+// const store = useCounter()
+// const selection = ref(0);
 const query = gql`
-	query getShips {
-		ships {
+	query Query($find: LaunchFind) {
+		launches(find: $find) {
+			mission_name
+			launch_site {
+				site_name
+			}
+			rocket {
+				rocket_name
+			}
+			details
+			launch_date_local
 			id
-			name
-			active
 		}
 	}
 `
-const { data } = useAsyncQuery<{
-	ships: {
-		id: String
-		name: String
-		active: Boolean
+
+const { data } = await useAsyncQuery<{
+	launches: {
+		id: number
+		mission_name: string
+		launch_site: {
+			site_name: string
+		}
+		rocket: {
+			rocket_name: string
+		}
+		details: string
+		launch_date_local: string
 	}[]
 }>(query)
-const ships = computed(() => data.value?.ships ?? [])
+
+const launches = data.value.launches
+
+function ConvertToDate(dateString: string) {
+	const dStr: string = dateString
+	const res: Date = new Date(dStr)
+	return res
+}
 </script>
