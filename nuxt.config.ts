@@ -3,6 +3,7 @@ import vuetify from 'vite-plugin-vuetify'
 
 export default defineNuxtConfig({
 	srcDir: 'client/',
+	pages: true,
 	build: { transpile: ['vuetify'] },
 	imports: { dirs: ['./stores'] },
 	apollo: {
