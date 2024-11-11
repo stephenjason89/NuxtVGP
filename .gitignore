@@ -5,6 +5,8 @@
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
+.husky
+
 
 # Nuxt Files
 /public/dist
