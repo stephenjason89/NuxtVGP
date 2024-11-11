@@ -1,7 +1,6 @@
 {
 	"private": true,
 	"scripts": {
-		"prepare": "husky install",
 		"build": "nuxt build",
 		"dev": "nuxt dev",
 		"generate": "nuxt generate",
@@ -13,8 +12,8 @@
 		"lintfix": "eslint --fix --ext .js,.jsx,.ts,.tsx,.vue --ignore-path .gitignore . && stylelint --fix **/*.{vue,css,scss} --ignore-path .gitignore"
 	},
 	"lint-staged": {
-		"**/*": "prettier --write --ignore-unknown",
-		"*.{js,jsx,ts,tsx,vue}": "eslint --fix --ignore-path .gitignore",
+		"**/*": "prettier --write --ignore-unknown --ignore-path .prettierignore",
+		"*.{js,cjs,mjs,ts,jsx,tsx,vue}": "eslint --fix",
 		"*.{css,scss,vue}": "stylelint --fix --ignore-path .gitignore"
 	},
 	"config": {
@@ -23,25 +22,24 @@
 		}
 	},
 	"devDependencies": {
-		"@mdi/font": "^7.2.96",
+		"@antfu/eslint-config": "^3.8.0",
 		"@nuxtjs/apollo": "^5.0.0-alpha.9",
-		"@nuxtjs/eslint-config-typescript": "^12.0.0",
 		"cz-conventional-changelog": "^3.3.0",
-		"eslint": "^8.54.0",
+		"eslint": "^9.14.0",
 		"eslint-config-prettier": "^9.0.0",
-		"eslint-plugin-nuxt": "^4.0.0",
 		"eslint-plugin-prettier": "^5.0.1",
-		"husky": "^8.0.3",
-		"lint-staged": "^15.1.0",
-		"nuxt": "^3.8.2",
-		"postcss-html": "^1.5.0",
-		"prettier": "^3.1.0",
-		"stylelint": "^15.11.0",
-		"stylelint-config-standard-scss": "^11.1.0",
+		"husky": "^9.1.6",
+		"lint-staged": "^15.2.10",
+		"nuxt": "^3.14.159",
+		"postcss-html": "^1.7.0",
+		"prettier": "^3.3.3",
+		"stylelint": "^16.10.0",
+		"stylelint-config-standard-scss": "^13.1.0",
 		"stylelint-config-standard-vue": "^1.0.0",
-		"vite-plugin-vuetify": "^1.0.2"
+		"vite-plugin-vuetify": "^2.0.4"
 	},
 	"dependencies": {
+		"@mdi/font": "^7.2.96",
 		"@pinia/nuxt": "^0.5.1",
 		"sass": "^1.68.0",
 		"vuetify": "^3.3.23"

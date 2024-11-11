@@ -2,8 +2,6 @@
 
 This template incorporates the utilization of Nuxt3, Vuetify, GraphQL, and Pinia to create a robust foundation
 
-The source directory was repositioned to './client' to optimize project structure and facilitate easier integration with other backend frameworks if required.
-
 ### To learn more, you can check out:
 
 -[Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction)
